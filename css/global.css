@@ -26,6 +26,20 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../font/Quicksand-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('../font/Quicksand-Regular.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 html, body {
   margin: 0;
   height: 100%;
@@ -44,8 +58,18 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  font-weight: 700;
+  font-size: 4em;
+  font-family: "Quicksand", arial, helvetica, sans-serif;
+  margin: 0.25em 0;
+}
+
 h2 {
-  margin-bottom: 0.3em
+  font-weight: 500;
+  font-family: helvetica, arial, sans-serif;
+  margin-bottom: 0.3em;
+  text-align: center;
 }
 
 #header, #footer {
@@ -126,4 +150,19 @@ h2 {
   height: 3em;
   align-items: center;
   justify-content: center;
+}
+
+.largeButton {
+  background-color: #313E7C;
+  color: #fff;
+  padding: 0.5em 2em;
+  font-size: 1.5em;
+  box-shadow: 0 0 0 1px #313E7C inset;
+  text-align: center;
+  transition: 100ms;
+}
+
+.largeButton:hover, .largeButton:focus {
+  background-color: transparent;
+  color: #313E7C;
 }
