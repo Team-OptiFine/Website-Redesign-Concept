@@ -86,11 +86,13 @@ h2 {
 }
 
 #optifine a {
+  width: 100%;
+  text-align: center;
   color: #fff;
   transition: 100ms;
 }
 
-#optifine a:hover, #optifine a:focus {
+#optifine:hover > a, #optifine:focus > a {
   color: #313E7C;
 }
 
