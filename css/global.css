@@ -1,0 +1,127 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('../font/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../font/Roboto-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url('../font/Oswald-Medium.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: 'Roboto', arial, helvetica, sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  background-image: url('../img/snow64b.gif');
+  color: #0C0F1E;
+}
+
+a {
+  color: #313E7C;
+  text-decoration: none;
+}
+
+h2 {
+  margin-bottom: 0.3em
+}
+
+#header, #footer {
+  width: 100%;
+  display: flex;
+  background-color: #313E7C;
+}
+
+#header {
+  height: 5em;
+  justify-content: space-between;
+}
+
+#wrapper {
+  margin: 0 auto;
+  max-width: 900px;
+  min-width: 700px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0px 0px 20px #96a0c5;
+}
+
+#optifine {
+  flex-grow: 0.2;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  font-family: 'Oswald', arial, helvetica, sans-serif;
+  font-size: 300%;
+  font-weight: bold;
+  transition: 100ms;
+}
+
+#optifine:hover, #optifine:focus {
+  background-color: #fff;
+}
+
+#optifine a {
+  color: #fff;
+  transition: 100ms;
+}
+
+#optifine a:hover, #optifine a:focus {
+  color: #313E7C;
+}
+
+#nav {
+  flex-grow: 0.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#nav a, #footer a {
+  color: #fff;
+  padding: 0.5em 1em;
+  transition: 100ms;
+}
+
+#nav a:hover, #footer a:hover, #nav a:focus, #footer a:focus {
+  color: #313E7C;
+  background-color: #fff;
+}
+
+#content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em;
+}
+
+#footer {
+  height: 3em;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,322 @@
+.version {
+  width: 100%;
+}
+
+.listdl {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 2em;
+  transition: 100ms;
+  opacity: 1;
+}
+
+.showall {
+  color: #313E7C;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  padding: 0.5em 1em;
+  margin: 0.25em 0;
+  transition: 100ms;
+}
+
+.showall:before {
+  content: "";
+  display: inline-block;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid currentColor;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  transform: translateY(-2px);
+  transition: 100ms;
+}
+
+.showall:hover, .showall:focus {
+  color: #FFF;
+  background-color: #313E7C;
+}
+
+.toggle-unstable {
+  display:none;
+}
+
+.toggle-unstable:checked ~ .showall:before {
+  transform: rotate(90deg) translateX(-2px);
+}
+
+.toggle-unstable:not(:checked) ~ .listdl.unstable {
+  display:none;
+}
+
+.itemdl {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  margin: 0.25em 0;
+  padding: 0.25em;
+}
+
+.itemdl * {
+  padding: 0.25em 0.5em;
+  margin: 0 1px;
+  transition: 100ms;
+  display: flex;
+  align-items: center;
+}
+
+.itemdl a:first-of-type {
+  padding: 0.25em 0.75em;
+}
+
+.stable .itemdl:first-child {
+  background-color: #E5EAFF;
+}
+
+/* .stable .itemdl:first-child .ofversion:after {
+  content: "(Latest stable)";
+  margin-left: 0.5em;
+} */
+
+.ofversion {
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+.stable .itemdl:first-of-type a:first-of-type {
+  color: #FFF;
+  background-color: #313E7C;
+  box-shadow: 0 0 0 1px #313E7C inset;
+}
+
+.stable .itemdl:first-of-type a:first-of-type:hover, .stable .itemdl:first-of-type a:first-of-type:focus {
+  color: #313E7C;
+  background-color: transparent;
+}
+
+.stable .itemdl a:hover, .stable .itemdl a:focus {
+  color: #FFF;
+  background-color: #313E7C;
+}
+
+.unstable .itemdl a {
+  color: #A82F2F;
+}
+
+.unstable .itemdl:nth-child(2) {
+  background-color: #FFE5E5;
+}
+
+/* .unstable .itemdl:nth-child(2) .ofversion:after {
+  content: "(Latest)";
+  margin-left: 0.5em;
+} */
+
+.unstable .itemdl a:hover, .unstable .itemdl a:focus {
+  color: #FFF;
+  background-color: #A82F2F;
+}
+
+.unstable .itemdl:nth-child(2) a:first-of-type {
+  color: #FFF;
+  background-color: #A82F2F;
+  box-shadow: 0 0 0 1px #A82F2F inset;
+}
+
+.unstable .itemdl:nth-child(2) a:first-of-type:hover, .unstable .itemdl:nth-child(2) a:first-of-type:focus {
+  color: #A82F2F;
+  background-color: transparent;
+}
+
+.warning {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  margin: 0.1em 0;
+  padding: 0.5em;
+  color: #FFF;
+  background-color: #A82F2F;
+}
+
+.fixDlWidth {
+  width: 240px;
+  display: flex;
+  justify-content: end;
+}
+
+.fixDlWidth * {
+  padding: 0;
+}
+
+.fixDlWidth *:first-of-type {
+  flex-grow: 1;
+  justify-content: center;
+  text-align: center;
+  margin-right: 1em;
+}
+
+.forge {
+  width: 150px;
+  justify-content: center;
+  text-align: center;
+}
+
+/* version selector stuff below this line */
+
+#selector {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  margin: 1em 0 2em;
+}
+
+#selector > * {
+  margin: .5em;
+}
+
+#mcversion {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#mcversion select {
+  padding: 1em 3.5em 1em 1.5em;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+  border: 1px solid #313E7C;
+  color: #313E7C;
+  -moz-appearance: none;
+	-webkit-appearance: none;
+  appearance: none;
+  transition: 100ms;
+}
+
+#selectVerStyle {
+  position: relative;
+  transition: 100ms;
+}
+
+#selectVerStyle:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #313E7C;
+  margin: 1.25em -1.25em;
+  transform: translate(-1px, 1px);
+  transition: 100ms;
+}
+
+#selectVerLabel:hover ~ #selectVerStyle:after, #selectVerLabel:focus ~ #selectVerStyle:after, #selectVerStyle:hover:after, #selectVerStyle:hover:after {
+  border-top: 5px solid #FFF;
+}
+
+#selectVerStyle:before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background-color: transparent;
+  background-color: ;
+  width: 2em;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transition: 100ms;
+}
+
+#selectVerLabel:hover ~ #selectVerStyle:before, #selectVerLabel:focus ~ #selectVerStyle:before, #selectVerStyle:hover:before, #selectVerStyle:focus:before {
+  background-color: #313E7C;
+}
+
+#selectVer option:first-of-type {
+  font-weight: 700;
+}
+
+#easylinks {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#easylinks a {
+  background-color: transparent;
+  color: #313E7C;
+  padding: 0.5em 1em;
+  width: 100%;
+  text-align: center;
+  margin: 0 1px;
+  transition: 100ms;
+}
+
+#easylinks a:hover, #easylinks a:focus {
+  background-color: #313E7C;
+  color: #FFF;
+}
+
+.dl {
+  background-color: #313E7C;
+  color: #fff;
+  width: 100%;
+  padding: 0.5em 0;
+  font-size: 1.5em;
+  box-shadow: 0 0 0 1px #313E7C inset;
+  text-align: center;
+  transition: 100ms;
+}
+
+.dl:hover, .dl:focus {
+  background-color: transparent;
+  color: #313E7C;
+}
+
+/* show version list stuff */
+
+#allv {
+  display: none;
+}
+
+#allv-label {
+  cursor: pointer;
+  user-select: none;
+  display: block;
+  text-align: center;
+  width: 100%;
+  padding: 0.5em 0;
+  color: #fff;
+  background-color: #313E7C;
+  box-shadow: 0 0 0 1px #313E7C inset;
+  cursor: pointer;
+  transition: 100ms;
+}
+
+#allv-label:hover {
+  color: #313E7C;
+  background-color: transparent;
+}
+
+#allv-label:before {
+  content: " ";
+  display: inline-block;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid currentColor;
+  vertical-align: middle;
+  margin-right: 0.7rem;
+  transform: translateY(-2px);
+  transition: 100ms;
+}
+#allv:checked + #allv-label:before {
+  transform: rotate(90deg) translateX(-2px);
+}
+#allv-list {
+  display: none;
+  width: 100%;
+}
+#allv:checked + #allv-label + #allv-list {
+  display: block;
+}
