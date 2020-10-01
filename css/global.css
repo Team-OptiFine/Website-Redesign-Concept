@@ -95,7 +95,6 @@ h2 {
 }
 
 #optifine {
-  flex-grow: 0.2;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -114,6 +113,7 @@ h2 {
   text-align: center;
   color: #fff;
   transition: 100ms;
+  padding: 0 0.5em;
 }
 
 #optifine:hover > a, #optifine:focus > a {
@@ -121,16 +121,18 @@ h2 {
 }
 
 #nav {
-  flex-grow: 0.4;
+  flex-grow: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
+  margin: 0 1.5em;
 }
 
 #nav a, #footer a {
   color: #fff;
   padding: 0.5em 1em;
   transition: 100ms;
+  margin: 0 1px;
 }
 
 #nav a:hover, #footer a:hover, #nav a:focus, #footer a:focus {
