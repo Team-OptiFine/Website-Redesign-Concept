@@ -35,6 +35,9 @@
   <meta name="theme-color" content="#E29F00" />
   <meta name="msapplication-TileColor" content="#E29F00">
 
+
+  <script src='https://unpkg.com/jimp@0.14.0/browser/lib/jimp.js'></script>
+
   <title>Donate | OptiFine</title>
 </head>
 
@@ -55,23 +58,29 @@
     <div id="content">
       <h1>Donate</h1>
       <p>Support OptiFine's continued development and optionally receive your very own in-game OptiFine cape as a tribute to your generosity. These capes are highly customizable, and are visible to all players with OptiFine installed.</p>
+      <p>To receive a cape after donating, simply enter your Minecraft username below. Leave this blank if you only want to make the donation. Remember, you can always activate capes later by logging in to your OptiFine account.</p>
       <h3>Thank you for your consideration!</h3>
 
-      <input type="text" id="playerName">
+      Minecraft username (optional)
+      <input type="text" id="playerName" placeholder="Steve" pattern="[a-zA-Z0-9_]{1,16}">
 
-      View Back <input type="checkbox" id="flip">
-      Animate <input type="checkbox" id="animate">
+      <div id="capeEditor">
+        View Back <input type="checkbox" id="flip">
+        Disable Shading <input type="checkbox" id="shade">
 
-      <div id="wrap3d">
-        <div id="cape">
-          <div id="capeTop"></div>
-          <div id="capeRight"></div>
-          <div id="capeFront"></div>
-          <div id="capeLeft"></div>
-          <div id="capeBack"></div>
-          <div id="capeBottom"></div>
+        <div id="wrap3d">
+          <div id="cape">
+            <div id="capeTop"></div>
+            <div id="capeRight" class="capeDarker"></div>
+            <div id="capeFront"></div>
+            <div id="capeLeft" class="capeDark"></div>
+            <div id="capeBack" class="capeDarker"></div>
+            <div id="capeBottom" class="capeDarker"></div>
+          </div>
         </div>
       </div>
+
+      
 
       <a class="largeButton" href="">Continue</a>
 
