@@ -124,7 +124,7 @@ h2 {
   flex-grow: 1;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   margin: 0 1.5em;
 }
 

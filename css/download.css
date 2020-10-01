@@ -141,7 +141,7 @@
 .fixDlWidth {
   width: 240px;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .fixDlWidth * {

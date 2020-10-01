@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   margin: 6em;
+  pointer-events: none;
 }
 
 #cape {
@@ -17,15 +18,25 @@
   transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
   position: relative;
   transition: 1s;
+  transform-origin: top center;
 
   animation-name: capeWave;
+
   animation-duration: 2s;
   animation-direction: alternate;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-fill-mode: both;
   animation-play-state: running;
-  transform-origin: top center;
+}
+
+#flip:checked ~ #wrap3d #cape {
+  animation-name: capeWaveBack;
+  transform: rotateY(-210deg) rotateZ(10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+}
+
+#animate:not(:checked) ~ #wrap3d #cape {
+  animation: none;
 }
 
 @keyframes capeWave {
@@ -38,14 +49,32 @@
   }
 }
 
+@keyframes capeWaveBack {
+  from {
+    transform: rotateY(-210deg) rotateZ(10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+  }
+
+  to {
+    transform: rotateY(-210deg) rotateZ(10deg) rotateX(10deg) translateX(0) translateY(0) translateZ(0);
+  }
+}
+
 #cape > div {
   position: absolute;
   float: left;
   overflow: visible !important;
   background-image: url("../img/cape.png");
-  image-rendering: crisp-edges;
   transition: 1s;
   outline: 1px solid transparent;
+
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 #capeTop {
