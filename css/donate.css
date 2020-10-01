@@ -1,0 +1,91 @@
+#wrap3d {
+  width: 32px;
+  height: 32px;
+  transform: scale(10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6em;
+}
+
+#cape {
+  width: 10px;
+  height: 16px;
+  transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+  position: relative;
+  transition: 1s;
+
+  animation-name: capeWave;
+  animation-duration: 2s;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-play-state: running;
+  transform-origin: top center;
+}
+
+@keyframes capeWave {
+  from {
+    transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+  }
+
+  to {
+    transform: rotateY(30deg) rotateZ(-10deg) rotateX(10deg) translateX(0) translateY(0) translateZ(0);
+  }
+}
+
+#cape > div {
+  position: absolute;
+  float: left;
+  overflow: visible !important;
+  background-image: url("../img/cape.png");
+  image-rendering: crisp-edges;
+  transition: 1s;
+  outline: 1px solid transparent;
+}
+
+#capeTop {
+  width: 10px;
+  height: 1px;
+  background-position: -1px 0;
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-0.5px) translateZ(0.5px);
+}
+
+#capeRight {
+  width: 1px;
+  height: 16px;
+  background-position: -1px -1px;
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-0.5px) translateY(0px) translateZ(0.5px);
+}
+
+#capeFront {
+  width: 10px;
+  height: 16px;
+  background-position: -1px -1px;
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(0px);
+}
+
+#capeLeft {
+  width: 1px;
+  height: 16px;
+  background-position: -11px -1px;
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(0.5px) translateY(0px) translateZ(9.5px);
+}
+
+#capeBack {
+  width: 10px;
+  height: 16px;
+  background-position: -12px -1px;
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(1px);
+}
+
+#capeBottom {
+  width: 10px;
+  height: 1px;
+  background-position: -11px 0px;
+  transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0.5px) translateZ(15.5px);
+}
