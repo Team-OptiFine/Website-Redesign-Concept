@@ -1,5 +1,7 @@
 #playerName {
   padding: .5em .75em;
+  margin: 1em;
+  text-align: center;
 }
 
 #playerName:placeholder-shown ~ #capeEditor {
