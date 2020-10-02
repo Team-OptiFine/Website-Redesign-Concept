@@ -4,11 +4,6 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <link rel="shortcut icon" href='img/favicon3.ico' />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&family=Roboto:wght@400;700&display=swap"/>
-
-  <link rel="stylesheet" href="css/global.css" />
-  <link rel="stylesheet" href="css/donate.css" />
 
   <meta name="description" content="OptiFine - Minecraft performance tuning and advanced graphics" />
   <meta name="keywords" content="optifine, minecraft, fps, lag, antialiasing, hd textures" />
@@ -35,8 +30,14 @@
   <meta name="theme-color" content="#E29F00" />
   <meta name="msapplication-TileColor" content="#E29F00">
 
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&family=Roboto:wght@400;700&display=swap"/>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/donate.css" />
+  <link rel="stylesheet" href="css/capeEditor.css" />
 
-  <script src='https://unpkg.com/jimp@0.14.0/browser/lib/jimp.js'></script>
+  <script src="https://unpkg.com/jimp@0.14.0/browser/lib/jimp.js"></script>
+  <script src="js/capeEditor.js"></script>
 
   <title>Donate | OptiFine</title>
 </head>
@@ -62,34 +63,95 @@
       <h3>Thank you for your consideration!</h3>
 
       Minecraft username (optional)
-      <input type="text" id="playerName" placeholder="Steve" pattern="[a-zA-Z0-9_]{1,16}">
+      <input type="text" id="playerName" placeholder="Steve" _autocomplete="off" pattern="[a-zA-Z0-9_]{1,16}">
 
       <div id="capeEditor">
-        View Back <input type="checkbox" id="flip">
-        Disable Shading <input type="checkbox" id="shade">
+        <input type="checkbox" id="flip" class="editor-input">
+        <input type="checkbox" id="shade" class="editor-input">
 
-        <div id="wrap3d">
-          <div id="cape">
-            <div id="capeTop"></div>
-            <div id="capeRight" class="shadeDarker"></div>
-            <div id="capeFront"></div>
-            <div id="capeLeft" class="shadeDark"></div>
-            <div id="capeBack" class="shadeDarker"></div>
-            <div id="capeBottom" class="shadeDarker"></div>
+        <div id="patternSelector" style="display:none">
+          <span id="hexcolor">
+            #
+            <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="882D2D" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}">
+          </span>
+
+          <div class="editor-toolbar">
+            <input type="button" id="done" class="editor-input">
+
+            <label for="done" class="editor-button" title="Done">OK</label>
+          </div>
+        </div>
+
+        <div id="drawer">
+          <select id="presets">
+            <option>OptiFine Classic</option>
+            <option>OptiFine Neo</option>
+            <option>OptiFine White</option>
+            <option>OptiFine Gray</option>
+            <option>OptiFine Black</option>
+            <option>OptiFine Red</option>
+            <option>OptiFine Green</option>
+            <option>OptiFine Blue</option>
+            <option>OptiFine Yellow</option>
+            <option>OptiFine Purple</option>
+            <option>OptiFine Cyan</option>
+          </select>
+
+          <div id="layers">
+            <div id="baseLayer" class="layer">
+              <div class="patternPreview" style="background-color: #882D2D"></div>
+              <span>Base</span>
+              <label class="editor-button" title="Edit Pattern">
+                Edit
+                <input type="button" class="editor-input openPatterns">
+              </label>
+            </div>
+            <!-- <div id="layer1" class="layer">
+              <div class="patternPreview" style="background-color: #882D2D"></div>
+              <span>Layer 1</span>
+              <label class="editor-button" title="Edit Pattern">
+                Edit
+                <input type="button" class="editor-input openPatterns">
+              </label>
+              <label class="editor-button" title="Delete Pattern">
+                Del
+                <input type="button" class="editor-input">
+              </label>
+            </div> -->
           </div>
 
-          <div id="elytra">
-            <div id="elytraTop"></div>
-            <div id="elytraRight" class="shadeDarker"></div>
-            <div id="elytraFront"></div>
-            <div id="elytraLeft" class="shadeDark"></div>
-            <div id="elytraBack" class="shadeDarker"></div>
-            <div id="elytraBottom" class="shadeDarker"></div>
+          <div class="editor-toolbar">
+            <label for="flip" class="editor-button" title="View Back">Flip</label>
+            <label for="shade" class="editor-button" title="Disable Shading">Shade</label>
+            <label class="editor-button" title="Add Pattern">
+              Add
+              <input type="button" id="add" class="editor-input">
+            </label>
+          </div>
+        </div>
+
+        <div id="wrapper3D">
+          <div id="viewport">
+            <div id="capeOrigin">
+              <div id="capeTop" class="cape"></div>
+              <div id="capeRight" class="cape shadeDarker"></div>
+              <div id="capeFront" class="cape"></div>
+              <div id="capeLeft" class="cape shadeDark"></div>
+              <div id="capeBack" class="cape shadeDarker"></div>
+              <div id="capeBottom" class="cape shadeDarker"></div>
+            </div>
+  
+            <div id="elytraOrigin">
+              <div id="elytraTop" class="elytra"></div>
+              <div id="elytraRight" class="elytra shadeDarker"></div>
+              <div id="elytraFront" class="elytra"></div>
+              <div id="elytraLeft" class="elytra shadeDark"></div>
+              <div id="elytraBack" class="elytra shadeDarker"></div>
+              <div id="elytraBottom" class="elytra shadeDarker"></div>
+            </div>
           </div>
         </div>
       </div>
-
-      
 
       <a class="largeButton" href="">Continue</a>
 

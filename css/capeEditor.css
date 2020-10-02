@@ -1,0 +1,257 @@
+#capeEditor {
+  width: 600px;
+  padding: 1em;
+  margin: 1em;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+#capeEditor, #patternSelector {
+  height: 400px;
+}
+
+#drawer, #patternSelector {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+#drawer > *, #patternSelector > * {
+  padding: 0.5em;
+}
+
+#patternSelector {
+  position: absolute;
+  background-color: #FFF;
+}
+
+#layers {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.layer {
+  height: 32px;
+  padding: 0.5em 0;
+  margin: 0.5em 0;
+  border: 1px solid #313E7C;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.layer > * {
+  margin: 0.5em;
+}
+
+.layer span {
+  flex-grow: 1;
+}
+
+.patternPreview {
+  width: 20px;
+  height: 32px;
+  border: 1px solid #313E7C;
+}
+
+#hexcolor input {
+  text-transform: uppercase;
+}
+
+#presets {
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.editor-input {
+  display: none;
+}
+
+#flip:checked ~ #drawer .editor-toolbar label[for="flip"] {
+  background-color: #313E7C;
+  color: #FFF;
+}
+
+#shade:not(:checked) ~ #drawer .editor-toolbar > label[for="shade"] {
+  background-color: #313E7C;
+  color: #FFF;
+}
+
+.editor-button {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  color: #313E7C;
+  border: 1px solid #313E7C;
+  transition: 100ms;
+}
+
+/* 3D Renderer */
+
+#wrapper3D {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#viewport {
+  width: 32px;
+  height: 32px;
+  transform: scale(10);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 6em;
+  pointer-events: none;
+}
+
+#viewport > div {
+  transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+  position: relative;
+  transition: 0.5s;
+}
+
+#flip:checked ~ #wrapper3D #viewport > div {
+  transform: rotateY(210deg) rotateZ(10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+}
+
+.cape, .elytra {
+  filter: blur(0.0px);
+  position: absolute;
+  float: left;
+  background-image: url("../img/cape.png");
+  background-size: 46px;
+  transition: 0.5s;
+
+  outline: 1px solid transparent;
+
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.shadeDarker:after, .shadeDark:after {
+  content:"";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: 100ms;
+}
+
+#shade:not(:checked) ~ #wrapper3D #viewport .shadeDarker:after {
+  background: rgba(0,0,0,0.3);
+}
+
+#shade:not(:checked) ~ #wrapper3D #viewport .shadeDark:after {
+  background: rgba(0,0,0,0.1);
+}
+
+/* Capes */
+
+#capeOrigin {
+  width: 10px;
+  height: 16px;
+}
+
+#capeTop {
+  width: 10px;
+  height: 1px;
+  background-position: -1px 0;
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-0.5px) translateZ(0.5px);
+}
+
+#capeRight {
+  width: 1px;
+  height: 16px;
+  background-position: 0px -1px;
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-0.5px) translateY(0px) translateZ(0.5px);
+}
+
+#capeFront {
+  width: 10px;
+  height: 16px;
+  background-position: -1px -1px;
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(0px);
+}
+
+#capeLeft {
+  width: 1px;
+  height: 16px;
+  background-position: -11px -1px;
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(0.5px) translateY(0px) translateZ(9.5px);
+}
+
+#capeBack {
+  width: 10px;
+  height: 16px;
+  background-position: -12px -1px;
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(1px);
+}
+
+#capeBottom {
+  width: 10px;
+  height: 1px;
+  background-position: -11px 0px;
+  transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0.5px) translateZ(15.5px);
+}
+
+/* Elytra */
+
+#elytraOrigin {
+  width: 10px;
+  height: 20px;
+}
+
+#elytraTop {
+  width: 10px;
+  height: 2px;
+  background-position: -24px 0;
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-1px) translateZ(1px) scale(-1);
+}
+
+#elytraRight {
+  width: 2px;
+  height: 20px;
+  background-position: -34px -2px;
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-1px) translateY(0px) translateZ(1px);
+}
+
+#elytraFront {
+  width: 10px;
+  height: 20px;
+  background-position: -36px -2px;
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(0px);
+}
+
+#elytraLeft {
+  width: 2px;
+  height: 20px;
+  background-position: -22px -2px;
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(1px) translateY(0px) translateZ(9px);
+}
+
+#elytraBack {
+  width: 10px;
+  height: 20px;
+  background-position: -24px -2px;
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(2px);
+}
+
+#elytraBottom {
+  width: 10px;
+  height: 2px;
+  background-position: -34px 0;
+  transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(1px) translateZ(19px) scale(-1);
+}
