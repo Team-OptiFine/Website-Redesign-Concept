@@ -1,0 +1,34 @@
+[
+  {
+    "name": null,
+    "file": "base"
+  },
+  {
+    "name": null,
+    "file": "shading_basic"
+  },
+  {
+    "name": "Top Gradient",
+    "file": "gradient_top"
+  },
+  {
+    "name": "Bottom Gradient",
+    "file": "gradient_bottom"
+  },
+  {
+    "name": "OptiFine Logo",
+    "file": "of_text"
+  },
+  {
+    "name": "OptiFine Shadow",
+    "file": "of_shadow"
+  },
+  {
+    "name": "OptiFine Logo, Top Gradient",
+    "file": "of_text_gradient_top"
+  },
+  {
+    "name": "OptiFine Logo, Bottom Gradient",
+    "file": "of_text_gradient_bottom"
+  }
+]

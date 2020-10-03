@@ -87,6 +87,7 @@
   color: #313E7C;
   border: 1px solid #313E7C;
   transition: 100ms;
+  font-size: 10px;
 }
 
 /* 3D Renderer */
@@ -186,7 +187,6 @@
   width: 10px;
   height: 16px;
   background-position: -1px -1px;
-  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(0px);
 }
 
 #capeLeft {
@@ -235,7 +235,6 @@
   width: 10px;
   height: 20px;
   background-position: -36px -2px;
-  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(0px);
 }
 
 #elytraLeft {

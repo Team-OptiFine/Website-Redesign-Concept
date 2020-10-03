@@ -314,25 +314,70 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function redraw() {
+    let presetData = JSON.parse(JSON.stringify(presets[opts.preset]));
+    let cdata = JSON.stringify(opts.capeData)
+
+    delete presetData.name;
+
+    presetData = JSON.stringify(presetData);
+
+    console.log(presetData);
+    console.log(cdata);
+
+    if(presetData === cdata) {
+      console.log('same as preset')
+    } else {
+      console.log('custom')
+    }
+
     let startTime = new Date().getTime();
+
+    document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+opts.capeData.baseColor;
 
     let img = colorPattern(patterns[0].jimp, "#"+opts.capeData.baseColor);
 
-    for(let i = 0; i < opts.capeData.layers.length; i++) {
-      let layer = opts.capeData.layers[i];
-
-      img = img.then(function(jimpImage) {
-        return applyPattern(jimpImage, patterns[layer.pattern].jimp, "#"+layer.color);
-      });
-
-      if(i+1 === opts.capeData.layers.length) {
-        img.then(function (img) {
-          img.getBase64Async(Jimp.MIME_PNG).then(function(base64) {
-            console.log("image rendered in "+(new Date().getTime() - startTime)+"ms")
-            opts.cssRule.style = "background-image: url(data:image/png;"+base64+")";
-          })
+    function finalRender() {
+      img.then(function (img) {
+        img.getBase64Async(Jimp.MIME_PNG).then(function(base64) {
+          console.log("image rendered in "+(new Date().getTime() - startTime)+"ms")
+          opts.cssRule.style = "background-image: url(data:image/png;"+base64+")";
         })
+      });
+    }
+
+    if(opts.capeData.layers.length === 0) {
+      finalRender();
+    } else {
+      for(let i = 0; i < opts.capeData.layers.length; i++) {
+        let layer = opts.capeData.layers[i];
+  
+        img = img.then(function(jimpImage) {
+          return applyPattern(jimpImage, patterns[layer.pattern].jimp, "#"+layer.color);
+        });
+  
+        if(i+1 === opts.capeData.layers.length) {
+          finalRender();
+        }
       }
+    }
+  }
+
+  function resetLayers() {
+    let layers = document.querySelectorAll("#layers .layer");
+    for(let i = 0; i < layers.length; i++) {
+      if(layers[i].id === "baseLayer") continue;
+
+      deleteLayer(true, layers[i]);
+    }
+  }
+
+  function redrawLayers() {
+    resetLayers();
+
+    let layers = opts.capeData.layers;
+
+    for(let i = 0; i < layers.length; i++) {
+      createLayer(true, layers[i].pattern, layers[i].color, i+1);
     }
   }
 
@@ -369,9 +414,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-
-  document.querySelector("#redraw").addEventListener("click", redraw);
-
   function recalcOrder() {
     const layers = document.querySelectorAll(".layer");
     for(let i = 1; i < layers.length; i++) {
@@ -387,12 +429,13 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(i);
 
     opts.preset = i;
-    opts.capeData = presets[i];
+    opts.capeData = JSON.parse(JSON.stringify(presets[i]));
     delete opts.capeData.name;
 
     console.log(opts.capeData);
 
     redraw();
+    redrawLayers();
   }
 
   // LOAD PRESETS
@@ -403,38 +446,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector("#presets").appendChild(newPreset);
   }
 
-  document.querySelector("#presets").onchange = function (e) {
-    setPreset(e.target.selectedIndex)
-  }
-
-  document.querySelector("#patternColor").onchange = function (e) {
-    console.log("change");
-    if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) {
-      if(opts.editing === 0) {
-        opts.capeData.baseColor = e.target.value;
-
-        document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+e.target.value;
-      } else {
-        opts.capeData.layers[opts.editing-1].color = e.target.value;
-
-        document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
-      }
-    }
-  }
-
-  document.querySelector("#patternColor").oninput = function (e) {
-    e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "");
-  }
-
   function closePatternEditor() {
 
 
     document.querySelector("#patternSelector").style = "display: none";
   }
 
-  function createLayer() {
+  function createLayer(onlyHTML, pattern, color, index) {
     const fullLayer = document.createDocumentFragment();
-    const layerNum = opts.capeData.layers.length+1;
+    const layerNum = (index != null) ? index : opts.capeData.layers.length+1;
+
+    const colorValue = (color != null) ? color : "FFFFFF";
+    const patternValue = (pattern != null) ? pattern : 2;
+
+    console.log(index);
 
     let layer = document.createElement('div');
     let patternPreview = document.createElement('div');
@@ -448,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
     layer = fullLayer.appendChild(layer);
 
     patternPreview.classList = "patternPreview";
-    patternPreview.style = "background-color: #FFFFFF";
+    patternPreview.style = "background-color: #"+colorValue;
     layer.appendChild(patternPreview);
 
     displayName.innerHTML = "Layer "+layerNum;
@@ -472,27 +497,32 @@ document.addEventListener('DOMContentLoaded', function () {
     deleteInput.type = "button";
     deleteInput.classList = "editor-input";
     deleteInput.addEventListener("click", function() {
-      deleteLayer(layer);
+      deleteLayer(false, layer);
     });
     deleteLabel.appendChild(deleteInput);
 
     document.querySelector("#layers").appendChild(fullLayer);
 
-    opts.capeData.layers.push({
-      color: "FFFFFF",
-      pattern: "00",
-      element: layer
-    });
+    if(!onlyHTML) {
+      opts.capeData.layers.push({
+        color: colorValue,
+        pattern: patternValue
+      });
+
+      redraw();
+    }
 
     return layerNum;
   }
 
-  function deleteLayer(elem) {
+  function deleteLayer(onlyHTML, elem) {
     const layerElem = elem.closest(".layer");
     const index = Array.from(layerElem.parentNode.children).indexOf(layerElem);
 
-    console.log("removing "+(index-1))
-    opts.capeData.layers.splice(index-1, 1);
+    if(!onlyHTML) {
+      console.log("removing "+(index-1))
+      opts.capeData.layers.splice(index-1, 1);
+    }
 
     while (elem.lastElementChild) {
       elem.removeChild(elem.lastElementChild);
@@ -500,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     elem.parentNode.removeChild(elem);
 
-    recalcOrder();
+    redraw();
   }
 
   function openPatternEditor(e, index) {
@@ -525,6 +555,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelector("#patternSelector").style = "";
+  }
+
+  document.querySelector("#redraw").addEventListener("click", function() {
+    redraw();
+    redrawLayers();
+  });
+
+  document.querySelector("#presets").onchange = function (e) {
+    setPreset(e.target.selectedIndex)
+  }
+
+  document.querySelector("#patternColor").onchange = function (e) {
+    console.log("change");
+    if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) {
+      if(opts.editing === 0) {
+        opts.capeData.baseColor = e.target.value;
+
+        document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+e.target.value;
+      } else {
+        opts.capeData.layers[opts.editing-1].color = e.target.value;
+
+        document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
+      }
+      redraw();
+    }
+  }
+
+  document.querySelector("#patternColor").oninput = function (e) {
+    e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "");
   }
 
   document.querySelector("#done").addEventListener("click", closePatternEditor);
