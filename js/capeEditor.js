@@ -321,6 +321,9 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log('same as preset')
     } else {
       console.log('custom')
+
+      let preSelect = document.querySelector("#presets");
+      preSelect.value = preSelect.children[0].value;
     }
 
     let startTime = new Date().getTime();
@@ -448,6 +451,7 @@ document.addEventListener('DOMContentLoaded', function () {
   for(let i = 0; i < presets.length; i++) {
     let newPreset = document.createElement('option');
     newPreset.innerHTML = presets[i].name;
+    if (i === 0) newPreset.selected = true;
 
     document.querySelector("#presets").appendChild(newPreset);
   }
@@ -576,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   document.querySelector("#presets").onchange = function (e) {
-    setPreset(e.target.selectedIndex)
+    setPreset(e.target.selectedIndex-1)
   }
 
   document.querySelector("#patternColor").onchange = function (e) {
@@ -591,6 +595,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
       }
+
+      console.warn('redraw');
+      redraw();
+    }
+  }
+
+  document.querySelector("#patternNumber").onchange = function (e) {
+    console.log("change");
+    if(patterns[e.target.value] != null && opts.editing !== 0) {
+      opts.capeData.layers[opts.editing-1].pattern = e.target.value;
 
       console.warn('redraw');
       redraw();

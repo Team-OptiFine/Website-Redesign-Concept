@@ -74,7 +74,7 @@
   color: #FFF;
 }
 
-#shade:not(:checked) ~ #drawer .editor-toolbar > label[for="shade"] {
+#shade:checked ~ #drawer .editor-toolbar > label[for="shade"] {
   background-color: #313E7C;
   color: #FFF;
 }
