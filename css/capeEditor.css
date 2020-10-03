@@ -122,11 +122,14 @@
   transform: rotateY(210deg) rotateZ(10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
 }
 
+.capeTex {
+  background-color: #FFF;
+}
+
 .cape, .elytra {
   filter: blur(0.0px);
   position: absolute;
   float: left;
-  background-image: url("../img/cape.png");
   background-size: 46px;
   transition: 0.5s;
 

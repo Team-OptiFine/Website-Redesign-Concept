@@ -35,7 +35,7 @@
     href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&family=Roboto:wght@400;700&display=swap"/>
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/donate.css" />
-  <link rel="stylesheet" href="css/capeEditor.css" />
+  <link rel="stylesheet" title="capeEditorCSS" href="css/capeEditor.css" />
 
   <script src="https://unpkg.com/jimp@0.14.0/browser/lib/jimp.js"></script>
   <script src="js/capeEditor.js"></script>
@@ -85,7 +85,7 @@
 
         <div id="drawer">
           <select id="presets">
-            <option>OptiFine Classic</option>
+            <!-- <option>OptiFine Classic</option>
             <option>OptiFine Neo</option>
             <option>OptiFine White</option>
             <option>OptiFine Gray</option>
@@ -95,7 +95,7 @@
             <option>OptiFine Blue</option>
             <option>OptiFine Yellow</option>
             <option>OptiFine Purple</option>
-            <option>OptiFine Cyan</option>
+            <option>OptiFine Cyan</option> -->
           </select>
 
           <div id="layers">
@@ -107,18 +107,6 @@
                 <input type="button" class="editor-input openPatterns">
               </label>
             </div>
-            <!-- <div id="layer1" class="layer">
-              <div class="patternPreview" style="background-color: #882D2D"></div>
-              <span>Layer 1</span>
-              <label class="editor-button" title="Edit Pattern">
-                Edit
-                <input type="button" class="editor-input openPatterns">
-              </label>
-              <label class="editor-button" title="Delete Pattern">
-                Del
-                <input type="button" class="editor-input">
-              </label>
-            </div> -->
           </div>
 
           <div class="editor-toolbar">
@@ -128,27 +116,31 @@
               Add
               <input type="button" id="add" class="editor-input">
             </label>
+            <label class="editor-button" title="test">
+              Redraw
+              <input type="button" id="redraw" class="editor-input">
+            </label>
           </div>
         </div>
 
         <div id="wrapper3D">
           <div id="viewport">
             <div id="capeOrigin">
-              <div id="capeTop" class="cape"></div>
-              <div id="capeRight" class="cape shadeDarker"></div>
-              <div id="capeFront" class="cape"></div>
-              <div id="capeLeft" class="cape shadeDark"></div>
-              <div id="capeBack" class="cape shadeDarker"></div>
-              <div id="capeBottom" class="cape shadeDarker"></div>
+              <div id="capeTop" class="capeTex cape"></div>
+              <div id="capeRight" class="capeTex cape shadeDarker"></div>
+              <div id="capeFront" class="capeTex cape"></div>
+              <div id="capeLeft" class="capeTex cape shadeDark"></div>
+              <div id="capeBack" class="capeTex cape shadeDarker"></div>
+              <div id="capeBottom" class="capeTex cape shadeDarker"></div>
             </div>
   
             <div id="elytraOrigin">
-              <div id="elytraTop" class="elytra"></div>
-              <div id="elytraRight" class="elytra shadeDarker"></div>
-              <div id="elytraFront" class="elytra"></div>
-              <div id="elytraLeft" class="elytra shadeDark"></div>
-              <div id="elytraBack" class="elytra shadeDarker"></div>
-              <div id="elytraBottom" class="elytra shadeDarker"></div>
+              <div id="elytraTop" class="capeTex elytra"></div>
+              <div id="elytraRight" class="capeTex elytra shadeDarker"></div>
+              <div id="elytraFront" class="capeTex elytra"></div>
+              <div id="elytraLeft" class="capeTex elytra shadeDark"></div>
+              <div id="elytraBack" class="capeTex elytra shadeDarker"></div>
+              <div id="elytraBottom" class="capeTex elytra shadeDarker"></div>
             </div>
           </div>
         </div>

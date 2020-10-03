@@ -10,28 +10,367 @@
 const opts = {
   doShading: true,
   editing: 0,
-  baseColor: "882D2D",
-  layers: []
+  preset: 0,
+  cssRule: null,
+  capeData: {
+    baseColor: "000000",
+    layers: []
+  }
 }
+
+const presets = [
+  {
+    name: "OptiFine Classic",
+    baseColor: "882D2D",
+    layers: [
+      {
+        color: "5C1C1C",
+        pattern: 3,
+      },
+      {
+        color: "E29F00",
+        pattern: 4,
+      },
+      {
+        color: "441616",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Neo",
+    baseColor: "313E7C",
+    layers: [
+      {
+        color: "27274E",
+        pattern: 3,
+      },
+      {
+        color: "E5EAFF",
+        pattern: 4,
+      },
+      {
+        color: "151835",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine White",
+    baseColor: "FAFAFA",
+    layers: [
+      {
+        color: "DDDDDD",
+        pattern: 3,
+      },
+      {
+        color: "FFFFFF",
+        pattern: 4,
+      },
+      {
+        color: "C8C8C8",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Gray",
+    baseColor: "888888",
+    layers: [
+      {
+        color: "5E5E5E",
+        pattern: 3,
+      },
+      {
+        color: "CECECE",
+        pattern: 4,
+      },
+      {
+        color: "444444",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Black",
+    baseColor: "202020",
+    layers: [
+      {
+        color: "010101",
+        pattern: 3,
+      },
+      {
+        color: "404040",
+        pattern: 4,
+      },
+      {
+        color: "202020",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Red",
+    baseColor: "880000",
+    layers: [
+      {
+        color: "5E0000",
+        pattern: 3,
+      },
+      {
+        color: "E20000",
+        pattern: 4,
+      },
+      {
+        color: "440000",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Green",
+    baseColor: "008800",
+    layers: [
+      {
+        color: "005E00",
+        pattern: 3,
+      },
+      {
+        color: "00E200",
+        pattern: 4,
+      },
+      {
+        color: "004400",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Blue",
+    baseColor: "000088",
+    layers: [
+      {
+        color: "00005E",
+        pattern: 3,
+      },
+      {
+        color: "4040FF",
+        pattern: 4,
+      },
+      {
+        color: "000044",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Yellow",
+    baseColor: "F5F500",
+    layers: [
+      {
+        color: "CACA00",
+        pattern: 3,
+      },
+      {
+        color: "FFFF00",
+        pattern: 4,
+      },
+      {
+        color: "BEBE00",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Purple",
+    baseColor: "880088",
+    layers: [
+      {
+        color: "5E005E",
+        pattern: 3,
+      },
+      {
+        color: "E200E2",
+        pattern: 4,
+      },
+      {
+        color: "440044",
+        pattern: 5,
+      }
+    ]
+  },
+  {
+    name: "OptiFine Cyan",
+    baseColor: "008888",
+    layers: [
+      {
+        color: "005E5E",
+        pattern: 3,
+      },
+      {
+        color: "00E2E2",
+        pattern: 4,
+      },
+      {
+        color: "004444",
+        pattern: 5,
+      }
+    ]
+  },
+  
+]
+
+const patternsDir = "./img/patterns/";
+
+const patterns = [
+  {
+    name: null,
+    file: "base",
+    jimp: null
+  },
+  {
+    name: null,
+    file: "shading_basic",
+    jimp: null
+  },
+  {
+    name: "Top Gradient",
+    file: "gradient_top",
+    jimp: null
+  },
+  {
+    name: "Bottom Gradient",
+    file: "gradient_bottom",
+    jimp: null
+  },
+  {
+    name: "OptiFine Logo",
+    file: "of_text",
+    jimp: null
+  },
+  {
+    name: "OptiFine Shadow",
+    file: "of_shadow",
+    jimp: null
+  },
+  {
+    name: "OptiFine Logo, Top Gradient",
+    file: "of_text_gradient_top",
+    jimp: null
+  },
+  {
+    name: "OptiFine Logo, Bottom Gradient",
+    file: "of_text_gradient_bottom",
+    jimp: null
+  }
+];
 
 document.addEventListener('DOMContentLoaded', function () {
   console.log('loaded!')
 
-  let cape;
+  // LOAD PATTERNS
+  let promises = [];
+  for(let i = 0; i < patterns.length; i++) {
+    let pattern = patterns[i];
+    let prefix = (pattern.name != null) ? "p_" : "s_"
+    let path = patternsDir + prefix + pattern.file + ".png";
 
-  /* Jimp.read("../img/cape.png")
-  .then(image => {
-    cape = image;
+    console.log("load: "+path);
+    
+    promises.push(Jimp.read(path));
+  }
+
+  Promise.all(promises)
+  .then(images => {
+    for(let i = 0; i < images.length; i++) {
+      patterns[i].jimp = images[i];
+    }
+    setPreset(0);
   })
   .catch(err => {
     console.error(err);
-  }) */
+  });
+
+  // GET CSS TEXTURE RULE
+  for(let i = 0; i < document.styleSheets.length; i++) {
+    let sheet = document.styleSheets[i];
+    if (sheet.title === "capeEditorCSS") {
+      for(let i = 0; i < sheet.cssRules.length; i++) {
+        let rule = sheet.cssRules[i];
+        if (rule.selectorText === ".capeTex") {
+          opts.cssRule = rule;
+          break;
+        }
+      }
+      break;
+    }
+  }
+
 
   function calcShading() {
     if(opts.doShading) {
 
     }
   }
+
+  function redraw() {
+    let startTime = new Date().getTime();
+
+    let img = colorPattern(patterns[0].jimp, "#"+opts.capeData.baseColor);
+
+    for(let i = 0; i < opts.capeData.layers.length; i++) {
+      let layer = opts.capeData.layers[i];
+
+      img = img.then(function(jimpImage) {
+        return applyPattern(jimpImage, patterns[layer.pattern].jimp, "#"+layer.color);
+      });
+
+      if(i+1 === opts.capeData.layers.length) {
+        img.then(function (img) {
+          img.getBase64Async(Jimp.MIME_PNG).then(function(base64) {
+            console.log("image rendered in "+(new Date().getTime() - startTime)+"ms")
+            opts.cssRule.style = "background-image: url(data:image/png;"+base64+")";
+          })
+        })
+      }
+    }
+  }
+
+  function colorPattern(pattern, color) {
+    return new Promise((resolve, reject) => {
+      let p = pattern.clone();
+
+      p.scan(0, 0, p.bitmap.width, p.bitmap.height, function(x, y, idx) {
+        const r = this.bitmap.data[idx+0];
+        const g = this.bitmap.data[idx+1];
+        const b = this.bitmap.data[idx+2];
+
+        this.bitmap.data[idx+3] = (r+g+b) / 3;
+
+        let newColor = Jimp.intToRGBA(Jimp.cssColorToHex(color));
+        this.bitmap.data[idx+0] = newColor.r;
+        this.bitmap.data[idx+1] = newColor.g;
+        this.bitmap.data[idx+2] = newColor.b;
+
+        //console.log("color is now "+[r, g, b].join())
+
+        if (x === p.bitmap.width-1 && y === p.bitmap.height-1) {
+          resolve(p);
+        }
+      });
+    });
+  }
+
+  function applyPattern(img, pattern, color) {
+    return new Promise((resolve, reject) => {
+      colorPattern(pattern, color).then(function (colored) {
+        resolve(img.composite(colored, 0, 0));
+      })
+    });
+  }
+
+
+  document.querySelector("#redraw").addEventListener("click", redraw);
 
   function recalcOrder() {
     const layers = document.querySelectorAll(".layer");
@@ -44,15 +383,39 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function setPreset(i) {
+    console.log(i);
+
+    opts.preset = i;
+    opts.capeData = presets[i];
+    delete opts.capeData.name;
+
+    console.log(opts.capeData);
+
+    redraw();
+  }
+
+  // LOAD PRESETS
+  for(let i = 0; i < presets.length; i++) {
+    let newPreset = document.createElement('option');
+    newPreset.innerHTML = presets[i].name;
+
+    document.querySelector("#presets").appendChild(newPreset);
+  }
+
+  document.querySelector("#presets").onchange = function (e) {
+    setPreset(e.target.selectedIndex)
+  }
+
   document.querySelector("#patternColor").onchange = function (e) {
     console.log("change");
     if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) {
       if(opts.editing === 0) {
-        opts.baseColor = e.target.value;
+        opts.capeData.baseColor = e.target.value;
 
         document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+e.target.value;
       } else {
-        opts.layers[opts.editing-1].color = e.target.value;
+        opts.capeData.layers[opts.editing-1].color = e.target.value;
 
         document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
       }
@@ -71,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function createLayer() {
     const fullLayer = document.createDocumentFragment();
-    const layerNum = opts.layers.length+1;
+    const layerNum = opts.capeData.layers.length+1;
 
     let layer = document.createElement('div');
     let patternPreview = document.createElement('div');
@@ -115,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector("#layers").appendChild(fullLayer);
 
-    opts.layers.push({
+    opts.capeData.layers.push({
       color: "FFFFFF",
       pattern: "00",
       element: layer
@@ -129,7 +492,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const index = Array.from(layerElem.parentNode.children).indexOf(layerElem);
 
     console.log("removing "+(index-1))
-    opts.layers.splice(index-1, 1);
+    opts.capeData.layers.splice(index-1, 1);
 
     while (elem.lastElementChild) {
       elem.removeChild(elem.lastElementChild);
@@ -156,9 +519,9 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(opts.editing);
 
     if(opts.editing === 0) {
-      document.querySelector("#patternColor").value = opts.baseColor;
+      document.querySelector("#patternColor").value = opts.capeData.baseColor;
     } else {
-      document.querySelector("#patternColor").value = opts.layers[opts.editing-1].color;
+      document.querySelector("#patternColor").value = opts.capeData.layers[opts.editing-1].color;
     }
 
     document.querySelector("#patternSelector").style = "";
