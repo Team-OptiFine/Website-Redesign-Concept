@@ -306,13 +306,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-
-  function calcShading() {
-    if(opts.doShading) {
-
-    }
-  }
-
   function redraw() {
     let presetData = JSON.parse(JSON.stringify(presets[opts.preset]));
     let cdata = JSON.stringify(opts.capeData)
@@ -334,15 +327,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+opts.capeData.baseColor;
 
-    let img = colorPattern(patterns[0].jimp, "#"+opts.capeData.baseColor);
+    let img = colorPattern(patterns[0].jimp, patterns[0].jimp, "#"+opts.capeData.baseColor);
 
     function finalRender() {
-      img.then(function (img) {
-        img.getBase64Async(Jimp.MIME_PNG).then(function(base64) {
+      img.then(function (jimpImage) {
+        if(opts.doShading) {
+          console.log('add shading')
+          return applyPattern(jimpImage, patterns[1].jimp, "#000000");
+        } else {
+          return Promise.resolve(jimpImage);
+        }
+      })
+      .then(function (img) {
+        img.getBase64Async(Jimp.MIME_PNG)
+        .then(function(base64) {
           console.log("image rendered in "+(new Date().getTime() - startTime)+"ms")
           opts.cssRule.style = "background-image: url(data:image/png;"+base64+")";
         })
-      });
+      })
     }
 
     if(opts.capeData.layers.length === 0) {
@@ -381,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function colorPattern(pattern, color) {
+  function colorPattern(base, pattern, color) {
     return new Promise((resolve, reject) => {
       let p = pattern.clone();
 
@@ -390,7 +392,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const g = this.bitmap.data[idx+1];
         const b = this.bitmap.data[idx+2];
 
-        this.bitmap.data[idx+3] = (r+g+b) / 3;
+        const baseTransparency = Jimp.intToRGBA(base.getPixelColor(x, y)).a;
+        const targetTransparency = (r+g+b) / 3;
+
+        this.bitmap.data[idx+3] = Math.min(targetTransparency, baseTransparency);
 
         let newColor = Jimp.intToRGBA(Jimp.cssColorToHex(color));
         this.bitmap.data[idx+0] = newColor.r;
@@ -408,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function applyPattern(img, pattern, color) {
     return new Promise((resolve, reject) => {
-      colorPattern(pattern, color).then(function (colored) {
+      colorPattern(img, pattern, color).then(function (colored) {
         resolve(img.composite(colored, 0, 0));
       })
     });
@@ -434,6 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log(opts.capeData);
 
+    console.warn('redraw');
     redraw();
     redrawLayers();
   }
@@ -447,8 +453,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function closePatternEditor() {
-
-
     document.querySelector("#patternSelector").style = "display: none";
   }
 
@@ -509,6 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pattern: patternValue
       });
 
+      console.warn('redraw');
       redraw();
     }
 
@@ -519,18 +524,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const layerElem = elem.closest(".layer");
     const index = Array.from(layerElem.parentNode.children).indexOf(layerElem);
 
-    if(!onlyHTML) {
-      console.log("removing "+(index-1))
-      opts.capeData.layers.splice(index-1, 1);
-    }
-
     while (elem.lastElementChild) {
       elem.removeChild(elem.lastElementChild);
     }
 
     elem.parentNode.removeChild(elem);
 
-    redraw();
+    if(!onlyHTML) {
+      console.log("removing "+(index-1))
+      opts.capeData.layers.splice(index-1, 1);
+
+      console.warn('redraw');
+      redraw();
+    }
   }
 
   function openPatternEditor(e, index) {
@@ -558,8 +564,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   document.querySelector("#redraw").addEventListener("click", function() {
+    console.warn('redraw');
     redraw();
     redrawLayers();
+  });
+
+  document.querySelector("#shade").addEventListener("click", function(e) {
+    opts.doShading = e.target.checked;
+    console.warn('redraw');
+    redraw();
   });
 
   document.querySelector("#presets").onchange = function (e) {
@@ -578,6 +591,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
       }
+
+      console.warn('redraw');
       redraw();
     }
   }
@@ -586,7 +601,9 @@ document.addEventListener('DOMContentLoaded', function () {
     e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "");
   }
 
-  document.querySelector("#done").addEventListener("click", closePatternEditor);
+  document.querySelector("#done").addEventListener("click", function (e) {
+    if(document.querySelector("#patternColor").value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) closePatternEditor();
+  });
 
   document.querySelector("#add").addEventListener("click", function () {
     openPatternEditor(null, createLayer());

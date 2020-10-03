@@ -67,18 +67,18 @@
       <input type="text" id="playerName" placeholder="Steve" _autocomplete="off" maxlength="16" size="16" pattern="[a-zA-Z0-9_]{1,16}">
 
       <div id="capeEditor">
-        <input type="checkbox" id="flip" class="editor-input">
-        <input type="checkbox" id="shade" class="editor-input">
+        <input type="checkbox" autocomplete="off" id="flip" class="editor-input">
+        <input type="checkbox" autocomplete="off" id="shade" class="editor-input">
 
         <div id="patternSelector" style="display:none">
+          <input type="number" id="patternNumber" autocomplete="off" maxlength="2" value="0" size="6">
+
           <span id="hexcolor">
-            #
-            <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="882D2D" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}">
+            # <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="882D2D" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}">
           </span>
 
           <div class="editor-toolbar">
             <input type="button" id="done" class="editor-input">
-
             <label for="done" class="editor-button" title="Done">OK</label>
           </div>
         </div>
@@ -111,14 +111,17 @@
 
           <div class="editor-toolbar">
             <label for="flip" class="editor-button" title="View Back">Flip</label>
-            <label for="shade" class="editor-button" title="Disable Shading">Shade</label>
-            <label class="editor-button" title="Add Pattern">
-              Add
-              <input type="button" id="add" class="editor-input">
+
+            <label for="shade" class="editor-button" title="Disable Shading">
+              Shade 
             </label>
+
+            <label class="editor-button" title="Add Pattern">
+              Add <input type="button" id="add" class="editor-input">
+            </label>
+
             <label class="editor-button" title="test">
-              Redraw
-              <input type="button" id="redraw" class="editor-input">
+              Redraw <input type="button" id="redraw" class="editor-input">
             </label>
           </div>
         </div>
@@ -127,20 +130,20 @@
           <div id="viewport">
             <div id="capeOrigin">
               <div id="capeTop" class="capeTex cape"></div>
-              <div id="capeRight" class="capeTex cape shadeDarker"></div>
+              <div id="capeRight" class="capeTex cape"></div>
               <div id="capeFront" class="capeTex cape"></div>
-              <div id="capeLeft" class="capeTex cape shadeDark"></div>
-              <div id="capeBack" class="capeTex cape shadeDarker"></div>
-              <div id="capeBottom" class="capeTex cape shadeDarker"></div>
+              <div id="capeLeft" class="capeTex cape"></div>
+              <div id="capeBack" class="capeTex cape"></div>
+              <div id="capeBottom" class="capeTex cape"></div>
             </div>
   
             <div id="elytraOrigin">
               <div id="elytraTop" class="capeTex elytra"></div>
-              <div id="elytraRight" class="capeTex elytra shadeDarker"></div>
+              <div id="elytraRight" class="capeTex elytra"></div>
               <div id="elytraFront" class="capeTex elytra"></div>
-              <div id="elytraLeft" class="capeTex elytra shadeDark"></div>
-              <div id="elytraBack" class="capeTex elytra shadeDarker"></div>
-              <div id="elytraBottom" class="capeTex elytra shadeDarker"></div>
+              <div id="elytraLeft" class="capeTex elytra"></div>
+              <div id="elytraBack" class="capeTex elytra"></div>
+              <div id="elytraBottom" class="capeTex elytra"></div>
             </div>
           </div>
         </div>

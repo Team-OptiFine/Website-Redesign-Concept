@@ -146,22 +146,6 @@
   -ms-interpolation-mode: nearest-neighbor;
 }
 
-.shadeDarker:after, .shadeDark:after {
-  content:"";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  transition: 100ms;
-}
-
-#shade:not(:checked) ~ #wrapper3D #viewport .shadeDarker:after {
-  background: rgba(0,0,0,0.3);
-}
-
-#shade:not(:checked) ~ #wrapper3D #viewport .shadeDark:after {
-  background: rgba(0,0,0,0.1);
-}
-
 /* Capes */
 
 #capeOrigin {
