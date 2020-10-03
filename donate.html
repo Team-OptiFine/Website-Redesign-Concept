@@ -67,6 +67,7 @@
       <input type="text" id="playerName" placeholder="Steve" _autocomplete="off" maxlength="16" size="16" pattern="[a-zA-Z0-9_]{1,16}">
 
       <div id="capeEditor">
+        <input type="checkbox" autocomplete="off" id="enable3d" class="editor-input">
         <input type="checkbox" autocomplete="off" id="flip" class="editor-input">
         <input type="checkbox" autocomplete="off" id="shade" class="editor-input" checked>
 
@@ -100,9 +101,13 @@
           </div>
 
           <div class="editor-toolbar">
+            <label for="enable3d" class="editor-button" title="Toggle 3D View">
+              3D
+            </label>
+
             <label for="flip" class="editor-button" title="View Back">Flip</label>
 
-            <label for="shade" class="editor-button" title="Disable Shading">
+            <label for="shade" class="editor-button" title="Toggle Shading">
               Shade 
             </label>
 

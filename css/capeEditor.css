@@ -69,12 +69,9 @@
   display: none;
 }
 
-#flip:checked ~ #drawer .editor-toolbar label[for="flip"] {
-  background-color: #313E7C;
-  color: #FFF;
-}
-
-#shade:checked ~ #drawer .editor-toolbar > label[for="shade"] {
+#flip:checked ~ #drawer .editor-toolbar label[for="flip"],
+#shade:checked ~ #drawer .editor-toolbar > label[for="shade"],
+#enable3d:checked ~ #drawer .editor-toolbar > label[for="enable3d"] {
   background-color: #313E7C;
   color: #FFF;
 }
@@ -111,15 +108,25 @@
 }
 
 #viewport > div {
+  position: relative;
+}
+
+#enable3d:checked ~ #wrapper3D #viewport > div {
   transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-  transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
-  position: relative;
-  transition: 0.5s;
+  transition: 250ms;
 }
 
-#flip:checked ~ #wrapper3D #viewport > div {
+#enable3d:not(:checked) + #flip:checked ~ #wrapper3D #viewport > div {
+  transform: rotateY(180deg);
+}
+
+#enable3d:checked + #flip:not(:checked) ~ #wrapper3D #viewport > div {
+  transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+}
+
+#enable3d:checked + #flip:checked ~ #wrapper3D #viewport > div {
   transform: rotateY(210deg) rotateZ(10deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
 }
 
@@ -132,7 +139,6 @@
   position: absolute;
   float: left;
   background-size: 46px;
-  transition: 250ms;
 
   outline: 1px solid transparent;
 
@@ -146,6 +152,13 @@
   -ms-interpolation-mode: nearest-neighbor;
 }
 
+#enable3d:not(:checked) + #flip:checked ~ #wrapper3D #capeBack,
+#enable3d:not(:checked) + #flip:not(:checked) ~ #wrapper3D #capeFront,
+#enable3d:not(:checked) + #flip:checked ~ #wrapper3D #elytraBack,
+#enable3d:not(:checked) + #flip:not(:checked) ~ #wrapper3D #elytraFront {
+  z-index: 1;
+}
+
 /* Capes */
 
 #capeOrigin {
@@ -154,44 +167,71 @@
 }
 
 #capeTop {
+  display: none;
   width: 10px;
   height: 1px;
   background-position: -1px 0;
-  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-0.5px) translateZ(0.5px) scale(1.015);
 }
 
 #capeRight {
+  display: none;
   width: 1px;
   height: 16px;
   background-position: 0px -1px;
-  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-0.5px) translateY(0px) translateZ(0.5px) scale(1.015);
 }
 
 #capeFront {
   width: 10px;
   height: 16px;
   background-position: -1px -1px;
-  transform: scale(1.015);
 }
 
 #capeLeft {
+  display: none;
   width: 1px;
   height: 16px;
   background-position: -11px -1px;
-  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(0.5px) translateY(0px) translateZ(9.5px) scale(1.015);
 }
 
 #capeBack {
   width: 10px;
   height: 16px;
   background-position: -12px -1px;
-  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(1px) scale(1.015);
+  transform:  rotateY(180deg) translateZ(1px);
 }
 
 #capeBottom {
+  display: none;
   width: 10px;
   height: 1px;
   background-position: -11px 0px;
+}
+
+#enable3d:checked ~ #wrapper3D #capeTop {
+  display: block;
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-0.5px) translateZ(0.5px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #capeRight {
+  display: block;
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-0.5px) translateY(0px) translateZ(0.5px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #capeFront {
+  transform: scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #capeLeft {
+  display: block;
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(0.5px) translateY(0px) translateZ(9.5px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #capeBack {
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(1px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #capeBottom {
+  display: block;
   transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0.5px) translateZ(15.5px) scale(1.015);
 }
 
@@ -203,43 +243,70 @@
 }
 
 #elytraTop {
+  display: none;
   width: 10px;
   height: 2px;
   background-position: -24px 0;
-  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-1px) translateZ(1px) scale(-1.015);
 }
 
 #elytraRight {
+  display: none;
   width: 2px;
   height: 20px;
   background-position: -34px -2px;
-  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-1px) translateY(0px) translateZ(1px) scale(1.015);
 }
 
 #elytraFront {
   width: 10px;
   height: 20px;
   background-position: -36px -2px;
-  transform: scale(1.015);
 }
 
 #elytraLeft {
+  display: none;
   width: 2px;
   height: 20px;
   background-position: -22px -2px;
-  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(1px) translateY(0px) translateZ(9px) scale(1.015);
 }
 
 #elytraBack {
   width: 10px;
   height: 20px;
   background-position: -24px -2px;
-  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(2px) scale(1.015);
+  transform: rotateY(180deg) translateZ(1px);
 }
 
 #elytraBottom {
+  display: none;
   width: 10px;
   height: 2px;
   background-position: -34px 0;
+}
+
+#enable3d:checked ~ #wrapper3D #elytraTop {
+  display: block;
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-1px) translateZ(1px) scale(-1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #elytraRight {
+  display: block;
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-1px) translateY(0px) translateZ(1px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #elytraFront {
+  transform: scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #elytraLeft {
+  display: block;
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(1px) translateY(0px) translateZ(9px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #elytraBack {
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(2px) scale(1.015);
+}
+
+#enable3d:checked ~ #wrapper3D #elytraBottom {
+  display: block;
   transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(1px) translateZ(19px) scale(-1.015);
 }
