@@ -265,6 +265,43 @@ const patterns = [
   }
 ];
 
+function hexToBytes(hex) {
+  let bytes = []
+  for (c = 0; c < hex.length; c += 2)
+  bytes.push(parseInt(hex.substr(c, 2), 16));
+  return bytes;
+}
+
+function bytesToBase64(buffer) {
+  let binary = '';
+  let bytes = new Uint8Array(buffer);
+  let len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+}
+
+function base64ToBytes(base64) {
+  let binary_string = window.atob(base64);
+  let len = binary_string.length;
+  let bytes = [];
+  for (let i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+  }
+  return bytes
+}
+
+function bytesToHex(bytes) {
+  let hex = []
+  for (i = 0; i < bytes.length; i++) {
+      let current = bytes[i] < 0 ? bytes[i] + 256 : bytes[i];
+      hex.push((current >>> 4).toString(16));
+      hex.push((current & 0xF).toString(16));
+  }
+  return hex.join("");
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   console.log('loaded!')
 
