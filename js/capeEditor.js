@@ -344,7 +344,11 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function (img) {
         img.getBase64Async(Jimp.MIME_PNG)
         .then(function(base64) {
-          console.log("image rendered in "+(new Date().getTime() - startTime)+"ms")
+          let timeTaken = (new Date().getTime() - startTime)+"ms";
+          console.log("image rendered in "+timeTaken)
+
+          document.querySelector("#renderTime").innerHTML = "Render Time: "+timeTaken;
+
           opts.cssRule.style = "background-image: url(data:image/png;"+base64+")";
         })
       })
@@ -355,7 +359,17 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       for(let i = 0; i < opts.capeData.layers.length; i++) {
         let layer = opts.capeData.layers[i];
-  
+
+        // get preview image
+        colorPattern(patterns[0].jimp, patterns[layer.pattern].jimp, "#"+layer.color).then(function(preview) {
+          preview.getBase64Async(Jimp.MIME_PNG)
+          .then(function(base64) {
+            console.log("updating "+i);
+            document.querySelectorAll(".patternPreview")[i+1].style = "background-image: url(data:image/png;"+base64+")";
+          });
+        });
+
+        // apply actual pattern
         img = img.then(function(jimpImage) {
           return applyPattern(jimpImage, patterns[layer.pattern].jimp, "#"+layer.color);
         });
@@ -481,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function () {
     layer = fullLayer.appendChild(layer);
 
     patternPreview.classList = "patternPreview";
-    patternPreview.style = "background-color: #"+colorValue;
+    //patternPreview.style = "background-color: #"+colorValue;
     layer.appendChild(patternPreview);
 
     displayName.innerHTML = "Layer "+layerNum;
@@ -589,11 +603,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if(opts.editing === 0) {
         opts.capeData.baseColor = e.target.value;
 
-        document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+e.target.value;
+        //document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+e.target.value;
       } else {
         opts.capeData.layers[opts.editing-1].color = e.target.value;
 
-        document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
+        //document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
       }
 
       console.warn('redraw');

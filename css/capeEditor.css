@@ -53,7 +53,18 @@
 .patternPreview {
   width: 20px;
   height: 32px;
+  background-position: -2px -2px;
+  background-size: 92px;
   border: 1px solid #313E7C;
+
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 #hexcolor input {
@@ -93,7 +104,14 @@
   flex-grow: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+}
+
+#renderTime {
+  position: absolute;
+  margin: 1em;
+  color: rgba(0,0,0,.25);
+  font-size: 12px;
 }
 
 #viewport {
@@ -105,6 +123,7 @@
   justify-content: space-around;
   margin: 6em;
   pointer-events: none;
+  flex-grow: 1;
 }
 
 #viewport > div {
@@ -139,6 +158,8 @@
   position: absolute;
   float: left;
   background-size: 46px;
+
+  /* transition: 250ms; */
 
   outline: 1px solid transparent;
 
@@ -209,30 +230,30 @@
 
 #enable3d:checked ~ #wrapper3D #capeTop {
   display: block;
-  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-0.5px) translateZ(0.5px) scale(1.015);
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-0.5px) translateZ(0.5px) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #capeRight {
   display: block;
-  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-0.5px) translateY(0px) translateZ(0.5px) scale(1.015);
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-0.5px) translateY(0px) translateZ(0.5px) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #capeFront {
-  transform: scale(1.015);
+  transform: scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #capeLeft {
   display: block;
-  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(0.5px) translateY(0px) translateZ(9.5px) scale(1.015);
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(0.5px) translateY(0px) translateZ(9.5px) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #capeBack {
-  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(1px) scale(1.015);
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(1px) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #capeBottom {
   display: block;
-  transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(0.5px) translateZ(15.5px) scale(1.015);
+  transform: rotateX(-90deg) rotateY(0deg) rotateZ(180deg) translateX(0px) translateY(-0.5px) translateZ(15.5px) scale(1.005);
 }
 
 /* Elytra */
@@ -285,28 +306,28 @@
 
 #enable3d:checked ~ #wrapper3D #elytraTop {
   display: block;
-  transform: rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(-1px) translateZ(1px) scale(-1.015);
+  transform: rotateX(90deg) rotateY(0deg) rotateZ(180deg) translateX(0px) translateY(2px) translateZ(1px) scale(1, 2) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #elytraRight {
   display: block;
-  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-1px) translateY(0px) translateZ(1px) scale(1.015);
+  transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg) translateX(-2px) translateY(0px) translateZ(1px) scale(2, 1) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #elytraFront {
-  transform: scale(1.015);
+  transform: scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #elytraLeft {
   display: block;
-  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(1px) translateY(0px) translateZ(9px) scale(1.015);
+  transform: rotateX(0deg) rotateY(90deg) rotateZ(0deg) translateX(2px) translateY(0px) translateZ(9px) scale(2, 1) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #elytraBack {
-  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(2px) scale(1.015);
+  transform: rotateX(0deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(0px) translateZ(2px) scale(1.005);
 }
 
 #enable3d:checked ~ #wrapper3D #elytraBottom {
   display: block;
-  transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateX(0px) translateY(1px) translateZ(19px) scale(-1.015);
+  transform: rotateX(-90deg) rotateY(180deg) rotateZ(0deg) translateX(0px) translateY(2px) translateZ(-19px) scale(1, 2) scale(1.005);
 }
