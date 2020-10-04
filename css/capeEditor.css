@@ -29,6 +29,15 @@
 #layers {
   height: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#layers:after {
+  content: "";
+  display: block;
+  height: 32px;
+  width: 100%;
+  padding: 0.5em 0;
 }
 
 .layer {
@@ -40,6 +49,24 @@
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.layerOver {
+  border: 1px dashed #313E7C;
+}
+
+.layerOver > *, .layerDrag {
+  pointer-events: none;
+}
+
+.layer:not(#baseLayer) {
+  cursor: grab;
 }
 
 .layer > * {
@@ -80,6 +107,12 @@
   display: none;
 }
 
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #flip:checked ~ #drawer .editor-toolbar label[for="flip"],
 #shade:checked ~ #drawer .editor-toolbar > label[for="shade"],
 #enable3d:checked ~ #drawer .editor-toolbar > label[for="enable3d"] {
@@ -91,11 +124,18 @@
   display: inline-block;
   width: 32px;
   height: 32px;
+  margin: 0.5em;
   cursor: pointer;
   color: #313E7C;
   border: 1px solid #313E7C;
   transition: 100ms;
   font-size: 10px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* 3D Renderer */

@@ -11,6 +11,10 @@ const opts = {
   doShading: true,
   editing: 0,
   preset: 0,
+  custom: false,
+  dragging: null,
+  dragPosOld: null,
+  dragPosNew: null,
   cssRule: null,
   capeData: {
     baseColor: "000000",
@@ -344,23 +348,27 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function redraw() {
-    let presetData = JSON.parse(JSON.stringify(presets[opts.preset]));
-    let cdata = JSON.stringify(opts.capeData)
+    if(!opts.custom) {
+      let presetData = JSON.parse(JSON.stringify(presets[opts.preset]));
+      let cdata = JSON.stringify(opts.capeData)
 
-    delete presetData.name;
+      delete presetData.name;
 
-    presetData = JSON.stringify(presetData);
+      presetData = JSON.stringify(presetData);
 
-    console.log(presetData);
-    console.log(cdata);
+      console.log(presetData);
+      console.log(cdata);
 
-    if(presetData === cdata) {
-      console.log('same as preset')
-    } else {
-      console.log('custom')
+      if(presetData === cdata) {
+        console.log('same as preset')
+      } else {
+        console.log('custom')
 
-      let preSelect = document.querySelector("#presets");
-      preSelect.value = preSelect.children[0].value;
+        opts.custom = true;
+
+        let preSelect = document.querySelector("#presets");
+        preSelect.value = preSelect.children[0].value;
+      }
     }
 
     let startTime = new Date().getTime();
@@ -419,10 +427,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function resetLayers() {
-    let layers = document.querySelectorAll("#layers .layer");
+    let layers = document.querySelectorAll("#layers .layer:not(#baseLayer)");
     for(let i = 0; i < layers.length; i++) {
-      if(layers[i].id === "baseLayer") continue;
-
       deleteLayer(true, layers[i]);
     }
   }
@@ -520,6 +526,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log(index);
 
+
+
     let layer = document.createElement('div');
     let patternPreview = document.createElement('div');
     let displayName = document.createElement('span');
@@ -529,6 +537,49 @@ document.addEventListener('DOMContentLoaded', function () {
     let deleteInput = document.createElement('input');
 
     layer.classList = "layer";
+    layer.setAttribute("draggable", true);
+    layer.addEventListener("dragstart", function(e) {
+      opts.dragging = e.target;
+      e.target.classList.add("layerDrag");
+      e.target.style.opacity = 0.5;
+
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', this.innerHTML);
+    });
+    layer.addEventListener("dragend", function(e) {
+      e.target.style.opacity = null;
+      opts.dragging = null;
+
+      let layers = document.querySelectorAll(".layer");
+
+      for(let i = 1; i < layers.length; i++) {
+        layers[i].classList.remove("layerOver", "layerDrag");
+      }
+    });
+    layer.addEventListener("dragenter", function(e) {
+      if (opts.dragging === e.target) return;
+      layer.classList.add("layerOver");
+      console.log(e.target);
+    });
+    layer.addEventListener("dragleave", function(e) {
+      if (opts.dragging === e.target) return;
+      layer.classList.remove("layerOver");
+    });
+    layer.addEventListener("dragover", function(e) {
+      if (e.preventDefault) e.preventDefault();
+      return false;
+    });
+    layer.addEventListener("drop", function(e) {
+      e.stopPropagation();
+
+      if (opts.dragging !== e.target) {
+        opts.dragging.innerHTML = e.target.innerHTML;
+        e.target.innerHTML = e.dataTransfer.getData('text/html');
+      }
+  
+      return false;
+    });
+    
     layer = fullLayer.appendChild(layer);
 
     patternPreview.classList = "patternPreview";
@@ -631,7 +682,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   document.querySelector("#presets").onchange = function (e) {
-    setPreset(e.target.selectedIndex-1)
+    if(opts.custom) {
+      let answer = confirm("Discard all changes?");
+
+      if(answer) {
+        setPreset(e.target.selectedIndex-1)
+
+        opts.custom = false;
+      } else {
+        e.target.value = e.target.children[0].value;
+      }
+    } else {
+      setPreset(e.target.selectedIndex-1)
+    }
   }
 
   document.querySelector("#patternColor").onchange = function (e) {
