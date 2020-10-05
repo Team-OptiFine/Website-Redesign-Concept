@@ -543,12 +543,18 @@ document.addEventListener('DOMContentLoaded', function () {
       e.target.classList.add("layerDrag");
       e.target.style.opacity = 0.5;
 
+      opts.dragPosOld = Array.from(e.target.parentNode.children).indexOf(e.target)-1;
+
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
+      e.dataTransfer.setData('text/html', e.target.innerHTML);
+
+      console.log("dragging "+opts.dragPosOld);
     });
     layer.addEventListener("dragend", function(e) {
       e.target.style.opacity = null;
       opts.dragging = null;
+      opts.dragPosOld = null;
+      opts.dragPosNew = null;
 
       let layers = document.querySelectorAll(".layer");
 
@@ -557,12 +563,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
     layer.addEventListener("dragenter", function(e) {
-      if (opts.dragging === e.target) return;
+      if (opts.dragging === e.target || opts.dragging == null) return;
       layer.classList.add("layerOver");
       console.log(e.target);
     });
     layer.addEventListener("dragleave", function(e) {
-      if (opts.dragging === e.target) return;
+      if (opts.dragging === e.target || opts.dragging == null) return;
       layer.classList.remove("layerOver");
     });
     layer.addEventListener("dragover", function(e) {
@@ -570,11 +576,27 @@ document.addEventListener('DOMContentLoaded', function () {
       return false;
     });
     layer.addEventListener("drop", function(e) {
+      if (e.preventDefault) e.preventDefault();
       e.stopPropagation();
 
-      if (opts.dragging !== e.target) {
-        opts.dragging.innerHTML = e.target.innerHTML;
-        e.target.innerHTML = e.dataTransfer.getData('text/html');
+      if (opts.dragging != null && opts.dragging !== e.target) {
+
+        opts.dragPosNew = Array.from(e.target.parentNode.children).indexOf(e.target)-1;
+
+        console.log("oldPos: "+opts.dragPosOld);
+        console.log("newPos: "+opts.dragPosNew);
+
+        const otherLayers = opts.capeData.layers.filter(function(layer, index) {
+          return index !== opts.dragPosOld;
+        });
+        
+        opts.capeData.layers = [
+          ...otherLayers.slice(0, opts.dragPosNew),
+          opts.capeData.layers[opts.dragPosOld],
+          ...otherLayers.slice(opts.dragPosNew)
+        ];
+
+        redraw();
       }
   
       return false;
@@ -627,8 +649,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function deleteLayer(onlyHTML, elem) {
-    const layerElem = elem.closest(".layer");
-    const index = Array.from(layerElem.parentNode.children).indexOf(layerElem);
+    const index = Array.from(elem.parentNode.children).indexOf(elem);
 
     while (elem.lastElementChild) {
       elem.removeChild(elem.lastElementChild);
