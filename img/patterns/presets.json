@@ -1,0 +1,200 @@
+[
+  {
+    "name": "OptiFine Classic",
+    "baseColor": "882D2D",
+    "layers": [
+      {
+        "color": "5C1C1C",
+        "pattern": 3
+      },
+      {
+        "color": "E29F00",
+        "pattern": 4
+      },
+      {
+        "color": "441616",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Neo",
+    "baseColor": "313E7C",
+    "layers": [
+      {
+        "color": "27274E",
+        "pattern": 3
+      },
+      {
+        "color": "E5EAFF",
+        "pattern": 4
+      },
+      {
+        "color": "151835",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine White",
+    "baseColor": "FAFAFA",
+    "layers": [
+      {
+        "color": "DDDDDD",
+        "pattern": 3
+      },
+      {
+        "color": "FFFFFF",
+        "pattern": 4
+      },
+      {
+        "color": "C8C8C8",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Gray",
+    "baseColor": "888888",
+    "layers": [
+      {
+        "color": "5E5E5E",
+        "pattern": 3
+      },
+      {
+        "color": "CECECE",
+        "pattern": 4
+      },
+      {
+        "color": "444444",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Black",
+    "baseColor": "202020",
+    "layers": [
+      {
+        "color": "010101",
+        "pattern": 3
+      },
+      {
+        "color": "404040",
+        "pattern": 4
+      },
+      {
+        "color": "202020",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Red",
+    "baseColor": "880000",
+    "layers": [
+      {
+        "color": "5E0000",
+        "pattern": 3
+      },
+      {
+        "color": "E20000",
+        "pattern": 4
+      },
+      {
+        "color": "440000",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Green",
+    "baseColor": "008800",
+    "layers": [
+      {
+        "color": "005E00",
+        "pattern": 3
+      },
+      {
+        "color": "00E200",
+        "pattern": 4
+      },
+      {
+        "color": "004400",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Blue",
+    "baseColor": "000088",
+    "layers": [
+      {
+        "color": "00005E",
+        "pattern": 3
+      },
+      {
+        "color": "4040FF",
+        "pattern": 4
+      },
+      {
+        "color": "000044",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Yellow",
+    "baseColor": "F5F500",
+    "layers": [
+      {
+        "color": "CACA00",
+        "pattern": 3
+      },
+      {
+        "color": "FFFF00",
+        "pattern": 4
+      },
+      {
+        "color": "BEBE00",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Purple",
+    "baseColor": "880088",
+    "layers": [
+      {
+        "color": "5E005E",
+        "pattern": 3
+      },
+      {
+        "color": "E200E2",
+        "pattern": 4
+      },
+      {
+        "color": "440044",
+        "pattern": 5
+      }
+    ]
+  },
+  {
+    "name": "OptiFine Cyan",
+    "baseColor": "008888",
+    "layers": [
+      {
+        "color": "005E5E",
+        "pattern": 3
+      },
+      {
+        "color": "00E2E2",
+        "pattern": 4
+      },
+      {
+        "color": "004444",
+        "pattern": 5
+      }
+    ]
+  }
+]

@@ -5,6 +5,12 @@
   display: flex;
   align-items: stretch;
   justify-content: space-between;
+  opacity: 1;
+  transition: .5s;
+}
+
+#capeEditor.unloaded {
+  opacity: 0;
 }
 
 #capeEditor, #patternSelector {
@@ -32,22 +38,18 @@
   overflow-x: hidden;
 }
 
-#layers:after {
-  content: "";
-  display: block;
-  height: 32px;
-  width: 100%;
-  padding: 0.5em 0;
+.layer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.layer {
+.layer, #addLayer {
   height: 32px;
   padding: 0.5em 0;
   margin: 0.5em 0;
   border: 1px solid #313E7C;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
   font-size: 14px;
 
   -webkit-touch-callout: none;
@@ -55,6 +57,55 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+#addLayer.cannotAdd {
+  border: 1px solid #A82F2F;
+  color: #A82F2F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#addLayer.cannotAdd:after {
+  content: "Maximum amount of layers reached.";
+  width: 60%;
+}
+
+#addLayer.canAdd {
+  cursor: pointer;
+  transition: 100ms;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+#addLayer.canAdd:hover {
+  background-color: #313E7C;
+}
+
+#addLayer.canAdd:before, #addLayer.canAdd:after {
+  content: "";
+  position: relative;
+  background-color: #313E7C;
+  transition: 100ms;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#addLayer.canAdd:hover:before, #addLayer.canAdd:hover:after {
+  background-color: #FFF;
+}
+
+#addLayer.canAdd:before {
+  width: 1px;
+  height: 1em;
+}
+
+#addLayer.canAdd:after {
+  width: 1em;
+  height: 1px;
 }
 
 .layerOver {
@@ -121,7 +172,9 @@
 }
 
 .editor-button {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 32px;
   height: 32px;
   margin: 0.5em;
@@ -152,6 +205,11 @@
   margin: 1em;
   color: rgba(0,0,0,.25);
   font-size: 12px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #viewport {

@@ -5,7 +5,8 @@
 }
 
 #playerName:placeholder-shown ~ #capeEditor {
-  display: none;
+  filter: grayscale();
+  pointer-events: none;
 }
 
 #playerName:invalid {

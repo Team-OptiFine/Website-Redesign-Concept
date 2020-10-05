@@ -66,23 +66,10 @@
       Minecraft username (optional)
       <input type="text" id="playerName" placeholder="Steve" _autocomplete="off" maxlength="16" size="16" pattern="[a-zA-Z0-9_]{1,16}">
 
-      <div id="capeEditor">
+      <div id="capeEditor" class="unloaded">
         <input type="checkbox" autocomplete="off" id="enable3d" class="editor-input">
         <input type="checkbox" autocomplete="off" id="flip" class="editor-input">
         <input type="checkbox" autocomplete="off" id="shade" class="editor-input" checked>
-
-        <div id="patternSelector" style="display:none">
-          <input type="number" id="patternNumber" autocomplete="off" maxlength="2" value="0" size="6">
-
-          <span id="hexcolor">
-            # <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="882D2D" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}">
-          </span>
-
-          <div class="editor-toolbar">
-            <input type="button" id="done" class="editor-input">
-            <label for="done" class="editor-button" title="Done">OK</label>
-          </div>
-        </div>
 
         <div id="drawer">
           <select id="presets">
@@ -98,6 +85,7 @@
                 <input type="button" class="editor-input openPatterns">
               </label>
             </div>
+            <div id="addLayer" class="canAdd" title="Add New Layer"></div>
           </div>
 
           <div class="editor-toolbar">
@@ -111,13 +99,22 @@
               Shade 
             </label>
 
-            <label class="editor-button" title="Add Pattern">
-              Add <input type="button" id="add" class="editor-input">
-            </label>
-
             <label class="editor-button" title="test">
               Redraw <input type="button" id="redraw" class="editor-input">
             </label>
+          </div>
+        </div>
+
+        <div id="patternSelector" style="display:none">
+          <input type="number" id="patternNumber" autocomplete="off" maxlength="2" value="0" size="6">
+
+          <span id="hexcolor">
+            # <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="882D2D" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}">
+          </span>
+
+          <div class="editor-toolbar">
+            <input type="button" id="done" class="editor-input">
+            <label for="done" class="editor-button" title="Done">OK</label>
           </div>
         </div>
 
