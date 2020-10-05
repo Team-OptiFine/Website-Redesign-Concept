@@ -545,9 +545,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       opts.dragPosOld = Array.from(e.target.parentNode.children).indexOf(e.target)-1;
 
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', e.target.innerHTML);
-
       console.log("dragging "+opts.dragPosOld);
     });
     layer.addEventListener("dragend", function(e) {
