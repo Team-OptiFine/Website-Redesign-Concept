@@ -85,7 +85,7 @@
                 <input type="button" class="editor-input openPatterns">
               </label>
             </div>
-            <div id="addLayer" class="canAdd" title="Add New Layer"></div>
+            <div id="addLayer" class="canAdd"></div>
           </div>
 
           <div class="editor-toolbar">
@@ -105,12 +105,19 @@
           </div>
         </div>
 
-        <div id="patternSelector" style="display:none">
-          <input type="number" id="patternNumber" autocomplete="off" maxlength="2" value="0" size="6">
+        <div id="patternEditor" style="display:none">
+          <h3>Layer</h3>
+          <div id="patternSelector">
+          </div>
 
-          <span id="hexcolor">
-            # <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="882D2D" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}">
-          </span>
+          <input type="range" min="0" max="360" value="0" id="colorH">
+          <input type="range" min="0" max="100" value="0" id="colorS" style="background: linear-gradient(90deg, white, red);">
+          <input type="range" min="0" max="100" value="50" id="colorV" style="background: linear-gradient(90deg, black, red, white);">
+
+          <div id="hexcolor">
+            <span>#</span> 
+            <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="FFFFFF" size="6" pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3}">
+          </div>
 
           <div class="editor-toolbar">
             <input type="button" id="done" class="editor-input">

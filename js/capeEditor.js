@@ -26,6 +26,7 @@ const opts = {
 
 const presets = [];
 
+const staticPatterns = [];
 const patterns = [];
 
 function hexToBytes(hex) {
@@ -84,18 +85,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const pattern = json[i];
         const prefix = (pattern.name != null) ? "p_" : "s_";
         const path = `${dir}${prefix}${pattern.file}.png`;
+        let pOption, pInput;
+
+        if (pattern.name != null) {
+          pOption = document.createElement("label");
+          pOption.classList = "pattern";
+          pOption.title = pattern.name;
+
+          pInput = document.createElement("input");
+          pInput.type = "radio";
+          pInput.name = "pattern"
+          pInput.onchange = (e) => {
+            const newIndex = Array.from(document.querySelector("#patternSelector").children).indexOf(e.target.parentNode);
+            changePattern(newIndex);
+          }
+          pOption.appendChild(pInput);
+        }
   
         console.log(`load ${path}`);
         
         Jimp.read(path).then(image => {
           pattern.jimp = image;
-          patterns.push(pattern);
-  
-          if (i+1 === json.length) {
-            resolve();
+
+          if (pattern.name != null) {
+            patterns.push(pattern);
+
+            let prev = image.clone();
+
+            prev.invert()
+            .getBase64Async(Jimp.MIME_PNG)
+            .then((base64) => {
+              pOption.style = "background-image: url(data:image/png;"+base64+")";
+
+              document.querySelector("#patternSelector").appendChild(pOption);
+
+              if (i+1 === json.length) {
+                resolve();
+              } else {
+                i++;
+                loadNext();
+              }
+            });
           } else {
-            i++;
-            loadNext();
+            staticPatterns.push(pattern);
+
+            if (i+1 === json.length) {
+              resolve();
+            } else {
+              i++;
+              loadNext();
+            }
           }
         })
       })();
@@ -152,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .catch(err => {
     console.error(err);
   });
+
   function redraw() {
     if(!opts.custom) {
       // check if the design is now customized
@@ -179,12 +219,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     opts.capeData.layers = opts.capeData.layers.splice(0, 9);
 
+    redrawPatternSelector()
+
     // check layer limit and remove/add ability to add layers as needed
 
     if(opts.capeData.layers.length === layerLimit) {
       document.querySelector("#addLayer").classList = "cannotAdd";
+      document.querySelector("#addLayer").title = "";
     } else {
       document.querySelector("#addLayer").classList = "canAdd";
+      document.querySelector("#addLayer").title = "Add New Layer";
     }
 
     // reset graphical layers list
@@ -210,13 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // start compositing cape texture
 
     let startTime = new Date().getTime();
-    let img = colorPattern(patterns[0].jimp, patterns[0].jimp, "#"+opts.capeData.baseColor);
+    let img = colorPattern(staticPatterns[0].jimp, staticPatterns[0].jimp, "#"+opts.capeData.baseColor);
 
     const finalRender = () => {
       img.then(function (jimpImage) {
         if(opts.doShading) {
           console.log('add shading')
-          return applyPattern(jimpImage, patterns[1].jimp, "#000000");
+          return applyPattern(jimpImage, staticPatterns[1].jimp, "#000000");
         } else {
           return Promise.resolve(jimpImage);
         }
@@ -238,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let layer = opts.capeData.layers[i];
 
       // get preview image
-      colorPattern(patterns[0].jimp, patterns[layer.pattern].jimp, "#"+layer.color).then(function(preview) {
+      colorPattern(staticPatterns[0].jimp, patterns[layer.pattern].jimp, "#"+layer.color).then(function(preview) {
         preview.getBase64Async(Jimp.MIME_PNG)
         .then(function(base64) {
           console.log("updating "+i);
@@ -253,6 +297,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     finalRender();
+  }
+
+  function changePattern(index) {
+    if(patterns[index] != null && patterns[index].name != null && opts.editing != null && opts.editing !== 0) {
+      const patternOptions = document.querySelector("#patternSelector").children;
+      for(let i = 0; i < patternOptions.length; i++) {
+        patternOptions[i].classList.remove("patternSelected");
+      }
+
+      patternOptions[index].classList.add("patternSelected");
+      patternOptions[index].children[0].value = "on";
+
+      opts.capeData.layers[opts.editing-1].pattern = index;
+
+      console.warn('redraw');
+      redraw();
+    }
+  }
+
+  function redrawPatternSelector() {
+    console.log("redraw selector")
+    console.log(opts.editing);
+    if(opts.editing != null && opts.editing !== 0) {
+      const patternOptions = document.querySelector("#patternSelector").children;
+
+      for(let i = 0; i < patternOptions.length; i++) {
+        colorPattern(staticPatterns[0].jimp, patterns[i].jimp, "#"+opts.capeData.layers[opts.editing-1].color).then(function(preview) {
+          preview.getBase64Async(Jimp.MIME_PNG)
+          .then(function(base64) {
+            console.log("updating "+i);
+            patternOptions[i].style = "background-image: url(data:image/png;"+base64+")";
+          });
+        });
+      }
+    }
   }
 
   function colorPattern(base, pattern, color) {
@@ -305,7 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closePatternEditor() {
-    document.querySelector("#patternSelector").style = "display: none";
+    opts.editing = null;
+    document.querySelector("#patternEditor").style = "display: none";
   }
 
   function createLayer(onlyHTML, pattern, color, index) {
@@ -317,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const layerNum = (index != null) ? index : opts.capeData.layers.length+1;
 
     const colorValue = (color != null) ? color : "FFFFFF";
-    const patternValue = (pattern != null) ? pattern : 2;
+    const patternValue = (pattern != null) ? pattern : 0;
 
     console.log(index);
 
@@ -468,18 +548,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if(index) opts.editing = index;
+    const editLayerName = document.querySelector("#patternEditor h3");
 
     console.log(opts.editing);
 
     if(opts.editing === 0) {
+      editLayerName.innerHTML = "Base Layer";
+      document.querySelector("#patternSelector").style = "display:none";
       document.querySelector("#patternColor").value = opts.capeData.baseColor;
     } else {
+      editLayerName.innerHTML = `Layer ${opts.editing}`
+      document.querySelector("#patternSelector").style = "";
+      setTimeout(function() {
+        document.querySelector("#patternSelector").scrollTop = document.querySelector("#patternSelector").children[opts.capeData.layers[opts.editing-1].pattern].offsetTop;
+      }, 2)
+      changePattern(opts.capeData.layers[opts.editing-1].pattern);
+
       let currentLayer = opts.capeData.layers[opts.editing-1];
       document.querySelector("#patternColor").value = currentLayer.color;
-      document.querySelector("#patternNumber").value = currentLayer.pattern;
     }
 
-    document.querySelector("#patternSelector").style = "";
+    calcColorPick();
+
+    document.querySelector("#patternEditor").style = "";
   }
 
   document.querySelector("#redraw").addEventListener("click", function() {
@@ -509,36 +600,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.querySelector("#patternColor").onchange = function (e) {
-    console.log("change");
-    if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) {
-      if(opts.editing === 0) {
-        opts.capeData.baseColor = e.target.value;
-
-        //document.querySelector("#baseLayer .patternPreview").style = "background-color: #"+e.target.value;
-      } else {
-        opts.capeData.layers[opts.editing-1].color = e.target.value;
-
-        //document.querySelector("#layers").children[opts.editing].querySelector(".patternPreview").style = "background-color: #"+e.target.value;
-      }
-
-      console.warn('redraw');
-      redraw();
-    }
-  }
-
-  document.querySelector("#patternNumber").onchange = function (e) {
-    console.log("change");
-    if(patterns[e.target.value] != null && opts.editing !== 0) {
-      opts.capeData.layers[opts.editing-1].pattern = e.target.value;
-
-      console.warn('redraw');
-      redraw();
-    }
-  }
-
   document.querySelector("#patternColor").oninput = function (e) {
-    e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "");
+    e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "").substring(0, 6);
+
+    calcColorPick(e);
   }
 
   document.querySelector("#done").addEventListener("click", function (e) {
@@ -553,8 +618,149 @@ document.addEventListener('DOMContentLoaded', () => {
     openPatternEditor(null, createLayer());
   });
 
-  const toggles = document.querySelectorAll(".openPatterns");
-  for(let i = 0; i < toggles.length; i++) {
-    toggles[i].addEventListener("click", openPatternEditor)
+  document.querySelector("#baseLayer .editor-input").addEventListener("click", openPatternEditor)
+
+  function calcColorPick(e) {
+    const h = document.querySelector("#colorH");
+    const s = document.querySelector("#colorS");
+    const l = document.querySelector("#colorV");
+    const hex = document.querySelector("#patternColor");
+
+    if(e != null && e.target.type === "range") {
+      let hv, sv, lv, r, g, b, m, c, x;
+
+      hv = h.value;
+      sv = s.value;
+      lv = l.value;
+
+      hv /= 60
+      if (hv < 0) hv = 6 - (-hv % 6)
+      hv %= 6
+
+      sv = Math.max(0, Math.min(1, sv / 100))
+      lv = Math.max(0, Math.min(1, lv / 100))
+
+      c = (1 - Math.abs((2 * lv) - 1)) * sv
+      x = c * (1 - Math.abs((hv % 2) - 1))
+
+      if (hv < 1) {
+        r = c
+        g = x
+        b = 0
+      } else if (hv < 2) {
+        r = x
+        g = c
+        b = 0
+      } else if (hv < 3) {
+        r = 0
+        g = c
+        b = x
+      } else if (hv < 4) {
+        r = 0
+        g = x
+        b = c
+      } else if (hv < 5) {
+        r = x
+        g = 0
+        b = c
+      } else {
+        r = c
+        g = 0
+        b = x
+      }
+
+      m = lv - c / 2
+      r = Math.round((r + m) * 255)
+      g = Math.round((g + m) * 255)
+      b = Math.round((b + m) * 255)
+
+      r = ("0"+r.toString(16)).slice(-2);
+      g = ("0"+g.toString(16)).slice(-2);
+      b = ("0"+b.toString(16)).slice(-2);
+
+      hex.value = r+g+b;
+    } else {
+      // Convert hex to RGB first
+      let r = 0, g = 0, b = 0;
+
+      let hx = hex.value;
+
+      console.log(hx);
+
+      if (hx.length === 3) {
+        r = hx[0] + hx[0];
+        g = hx[1] + hx[1];
+        b = hx[2] + hx[2];
+      } else if (hx.length === 6) {
+        r = hx[0] + hx[1];
+        g = hx[2] + hx[3];
+        b = hx[4] + hx[5];
+      }
+
+      // Then to HSL
+      r = parseInt(r, 16) / 255;
+      g = parseInt(g, 16) / 255;
+      b = parseInt(b, 16) / 255;
+
+      let cmin = Math.min(r, g, b);
+      let cmax = Math.max(r, g, b);
+      let delta = cmax - cmin;
+      let hv = 0;
+      let sv = 0;
+      let lv = 0;
+
+      if (delta == 0)
+        hv = 0;
+      else if (cmax == r)
+        hv = ((g - b) / delta) % 6;
+      else if (cmax == g)
+        hv = (b - r) / delta + 2;
+      else
+        hv = (r - g) / delta + 4;
+
+      hv = Math.round(hv * 60);
+
+      if (hv < 0) hv += 360;
+
+      lv = (cmax + cmin) / 2;
+      sv = (delta == 0) ? 0 : delta / (1 - Math.abs(2 * lv - 1));
+      sv = +(sv * 100).toFixed(1);
+      lv = +(lv * 100).toFixed(1);
+
+      h.value = hv;
+      s.value = sv;
+      l.value = lv;
+    }
+
+    s.style = `background: linear-gradient(90deg, hsl(0, 0%, ${l.value}%), hsl(${h.value}, 100%, ${l.value}%));`;
+    l.style = `background: linear-gradient(90deg, black, hsl(${h.value}, ${s.value}%, 50%), white);`;
   }
+
+  function updateColor(e) {
+    if (opts.editing != null) {
+      const color = document.querySelector("#patternColor").value;
+
+      if (opts.editing === 0) {
+        opts.capeData.baseColor = color;
+      } else {
+        opts.capeData.layers[opts.editing - 1].color = color;
+      }
+
+      console.warn('redraw');
+      redraw();
+    }
+  }
+
+  document.querySelector("#colorH").oninput = calcColorPick;
+  document.querySelector("#colorS").oninput = calcColorPick;
+  document.querySelector("#colorV").oninput = calcColorPick;
+
+  document.querySelector("#patternColor").onchange = function (e) {
+    console.log("change");
+    if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) updateColor(e);
+  }
+
+  document.querySelector("#colorH").onchange = updateColor;
+  document.querySelector("#colorS").onchange = updateColor;
+  document.querySelector("#colorV").onchange = updateColor;
 });

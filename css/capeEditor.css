@@ -13,29 +13,111 @@
   opacity: 0;
 }
 
-#capeEditor, #patternSelector {
+#capeEditor, #patternEditor {
   height: 400px;
 }
 
-#drawer, #patternSelector {
+#drawer, #patternEditor {
   width: 250px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-#drawer > *, #patternSelector > * {
-  padding: 0.5em;
+#drawer > *, #patternEditor > * {
+  margin: 0.5em 0;
 }
 
-#patternSelector {
+#patternEditor {
   position: absolute;
   background-color: #FFF;
 }
 
+#patternEditor h3 {
+  flex-grow: 1;
+  margin: 0.25em;
+}
+
+#patternSelector {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  overflow: hidden scroll;
+}
+
+#patternSelector .pattern {
+  height: 80px;
+  width: 50px;
+  display: block;
+  background-position: -5px -5px;
+  background-size: 230px;
+  cursor: pointer;
+  border: 1px solid #313E7C;
+  transition: 100ms;
+
+  margin: 0 0.25em 0.25em 0;
+
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#patternSelector .pattern.patternSelected {
+  background-color: #313E7C;
+}
+
+#patternSelector .pattern > input {
+  display: none;
+}
+
+#colorH, #colorS, #colorV {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: .5em;
+  outline: none;
+  padding: 0.25em 0;
+  margin: .5em 0;
+}
+
+#colorH::-webkit-slider-thumb, #colorS::-webkit-slider-thumb, #colorV::-webkit-slider-thumb, #colorH::-moz-range-thumb, #colorS::-moz-range-thumb, #colorV::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0px;
+  height: 1.25em;
+  background: transparent;
+  cursor: pointer;
+  border: 4px solid #313E7C;
+  border-radius: 0;
+}
+
+#colorH {
+  background: linear-gradient(90deg, #FF0000, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000);
+}
+
 #layers {
   height: 100%;
+  width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+#layers > * {
+  width: auto;
 }
 
 .layer {
@@ -47,7 +129,7 @@
 .layer, #addLayer {
   height: 32px;
   padding: 0.5em 0;
-  margin: 0.5em 0;
+  margin: 0 0.5em 0.5em 0;
   border: 1px solid #313E7C;
 
   font-size: 14px;
@@ -145,13 +227,37 @@
   -ms-interpolation-mode: nearest-neighbor;
 }
 
+#hexcolor {
+  border: 1px solid #313E7C;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#hexcolor span {
+  color: #313E7C;
+  position: absolute;
+  margin: 0.25em;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 #hexcolor input {
+  border: none;
+  padding: 0.33em;
+  padding-left: 1em;
   text-transform: uppercase;
+  text-align: right;
 }
 
 #presets {
-  margin: 0.5em;
+  margin: 0.5em 0;
   padding: 0.5em;
+  width: 100%;
 }
 
 .editor-input {
@@ -162,6 +268,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 #flip:checked ~ #drawer .editor-toolbar label[for="flip"],
@@ -177,7 +284,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  margin: 0.5em;
+  margin: 0.5em 0;
   cursor: pointer;
   color: #313E7C;
   border: 1px solid #313E7C;
@@ -189,6 +296,14 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.editor-toolbar .editor-button {
+  flex-grow: 1;
+}
+
+.editor-toolbar .editor-button:not(:last-child), .layer .editor-button {
+  margin-right: 0.5em;
 }
 
 /* 3D Renderer */
