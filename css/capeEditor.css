@@ -51,7 +51,7 @@
 #patternSelector .pattern {
   height: 80px;
   width: 50px;
-  display: block;
+  display: inline-block;
   background-position: -5px -5px;
   background-size: 230px;
   cursor: pointer;
