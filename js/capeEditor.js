@@ -29,6 +29,16 @@ const presets = [];
 const staticPatterns = [];
 const patterns = [];
 
+window.addEventListener('beforeunload', (e) => {
+  if (opts.custom) {
+      e.preventDefault();
+
+      const msg = "Are you sure you want to leave? Your cape design will be lost."
+      e.returnValue = msg;
+      return msg;
+  }
+});
+
 function hexToBytes(hex) {
   let bytes = []
   for (c = 0; c < hex.length; c += 2)
