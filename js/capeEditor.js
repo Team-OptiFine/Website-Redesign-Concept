@@ -194,7 +194,67 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(() => {
     console.log(patterns);
     console.log(presets);
-    document.querySelector("#capeEditor").classList.remove("unloaded");
+    document.querySelector("body").classList.remove("unloaded");
+
+    document.querySelector("#redraw").addEventListener("click", function() {
+      console.warn('redraw');
+      redraw();
+    });
+  
+    document.querySelector("#shade").addEventListener("click", function(e) {
+      opts.doShading = e.target.checked;
+      console.warn('redraw');
+      redraw();
+    });
+  
+    document.querySelector("#presets").onchange = function (e) {
+      if(opts.custom) {
+        let answer = confirm("Discard all changes?");
+  
+        if(answer) {
+          setPreset(e.target.selectedIndex-1)
+  
+          opts.custom = false;
+        } else {
+          e.target.value = e.target.children[0].value;
+        }
+      } else {
+        setPreset(e.target.selectedIndex-1)
+      }
+    }
+  
+    document.querySelector("#patternColor").oninput = function (e) {
+      e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "").substring(0, 6);
+  
+      calcColorPick(e);
+    }
+  
+    document.querySelector("#done").addEventListener("click", function (e) {
+      if(document.querySelector("#patternColor").value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) closePatternEditor();
+    });
+  
+    document.querySelector("#addLayer").addEventListener("click", function (e) {
+      if(opts.capeData.layers.length === layerLimit) {
+        e.target.classList.remove("canAdd");
+        return;
+      }
+      openPatternEditor(null, createLayer());
+    });
+  
+    document.querySelector("#baseLayer .editor-input").addEventListener("click", openPatternEditor)
+
+    document.querySelector("#colorH").oninput = calcColorPick;
+    document.querySelector("#colorS").oninput = calcColorPick;
+    document.querySelector("#colorV").oninput = calcColorPick;
+
+    document.querySelector("#patternColor").onchange = function (e) {
+      console.log("change");
+      if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) updateColor(e);
+    }
+
+    document.querySelector("#colorH").onchange = updateColor;
+    document.querySelector("#colorS").onchange = updateColor;
+    document.querySelector("#colorV").onchange = updateColor;
 
     setPreset(0);
   })
@@ -202,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error(err);
   });
 
-  function redraw() {
+  function redraw(scrollToBottom) {
     if(!opts.custom) {
       // check if the design is now customized
       let presetData = JSON.parse(JSON.stringify(presets[opts.preset]));
@@ -252,14 +312,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let layerData = opts.capeData.layers;
     for(let i = 0; i < layerData.length; i++) {
-      createLayer(true, layerData[i].pattern, layerData[i].color, i+1);
+      let l = layerData[i];
+      createLayer(true, l.pattern, l.color, i+1, l.visible);
     }
 
     // move "add layer" button to end of node list
 
     const layersSection = document.querySelector("#layers")
     layersSection.appendChild(document.querySelector("#addLayer"));
-    layersSection.scrollTop = layersSection.scrollHeight;
+    if (scrollToBottom) layersSection.scrollTop = layersSection.scrollHeight;
 
     // start compositing cape texture
 
@@ -302,7 +363,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // apply actual pattern
       img = img.then(function(jimpImage) {
-        return applyPattern(jimpImage, patterns[layer.pattern].jimp, "#"+layer.color);
+        if(layer.visible) {
+          return applyPattern(jimpImage, patterns[layer.pattern].jimp, "#"+layer.color);
+        } else return jimpImage;
       });
     }
 
@@ -398,7 +461,19 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("#patternEditor").style = "display: none";
   }
 
-  function createLayer(onlyHTML, pattern, color, index) {
+  function moveLayer(oldPos, newPos) {
+    const otherLayers = opts.capeData.layers.filter(function(layer, index) {
+      return index !== oldPos;
+    });
+    
+    opts.capeData.layers = [
+      ...otherLayers.slice(0, newPos),
+      opts.capeData.layers[oldPos],
+      ...otherLayers.slice(newPos)
+    ];
+  }
+
+  function createLayer(onlyHTML, pattern, color, index, visible) {
     if(!onlyHTML && opts.capeData.layers.length === layerLimit) {
       return layerLimit-1;
     }
@@ -411,17 +486,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log(index);
 
-
-
     let layer = document.createElement('div');
+    let toggleVisible = document.createElement('input');
     let patternPreview = document.createElement('div');
     let displayName = document.createElement('span');
+    let grabPoint = document.createElement('div');
+    let moveWrapper = document.createElement('div');
+    let moveUpLabel = document.createElement('label');
+    let moveUpInput = document.createElement('input');
+    let moveDownLabel = document.createElement('label');
+    let moveDownInput = document.createElement('input');
     let editLabel = document.createElement('label');
     let editInput = document.createElement('input');
     let deleteLabel = document.createElement('label');
     let deleteInput = document.createElement('input');
 
-    layer.classList = "layer";
+    layer.classList = "layer itembar-spaced";
     layer.setAttribute("draggable", true);
     layer.addEventListener("dragstart", function(e) {
       opts.dragging = e.target;
@@ -468,15 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("oldPos: "+opts.dragPosOld);
         console.log("newPos: "+opts.dragPosNew);
 
-        const otherLayers = opts.capeData.layers.filter(function(layer, index) {
-          return index !== opts.dragPosOld;
-        });
-        
-        opts.capeData.layers = [
-          ...otherLayers.slice(0, opts.dragPosNew),
-          opts.capeData.layers[opts.dragPosOld],
-          ...otherLayers.slice(opts.dragPosNew)
-        ];
+        moveLayer(opts.dragPosOld, opts.dragPosNew);
 
         redraw();
       }
@@ -486,28 +558,105 @@ document.addEventListener('DOMContentLoaded', () => {
     
     layer = fullLayer.appendChild(layer);
 
+    // Toggle Visibility
+    toggleVisible.type = "checkbox";
+    if (visible != null && visible === true) toggleVisible.checked = true;
+    toggleVisible.classList = "layerVisibility";
+    toggleVisible.title = "Toggle Visibility";
+    toggleVisible.addEventListener("click", function(e) {
+      const pos = Array.from(document.querySelector("#layers").children).indexOf(e.target.parentNode)-1;
+
+      opts.capeData.layers[pos].visible = e.target.checked;
+
+      console.warn('redraw');
+      redraw();
+    });
+    layer.appendChild(toggleVisible);
+
+    // Pattern Preview
     patternPreview.classList = "patternPreview";
     //patternPreview.style = "background-color: #"+colorValue;
     layer.appendChild(patternPreview);
 
-    displayName.innerHTML = "Layer "+layerNum;
+    // Layer Name
+    displayName.innerHTML = `Layer ${index}`;
     layer.appendChild(displayName);
 
+    // Move Layer Buttons Wrapper
+    moveWrapper.classList = "vertical-button-wrapper";
+    moveWrapper = layer.appendChild(moveWrapper)
+
+    // Move Layer Up Button Label
+    moveUpLabel.classList = "editor-button half";
+    moveUpLabel.title = "Move Layer Up";
+    moveUpLabel.innerHTML = "/\\";
+    moveUpLabel = moveWrapper.appendChild(moveUpLabel);
+
+    // Move Layer Up Button Input
+    moveUpInput.type = "button";
+    moveUpInput.classList = "editor-input";
+    moveUpInput.addEventListener("click", function(e) {
+      const pos = Array.from(document.querySelector("#layers").children).indexOf(e.target.closest(".layer"))-1;
+
+      if(pos !== 0) {
+        moveLayer(pos, pos-1);
+
+        redraw();
+      }
+    });
+    moveUpLabel.appendChild(moveUpInput);
+
+    // Move Layer Down Button Label
+    moveDownLabel.classList = "editor-button half";
+    moveDownLabel.title = "Move Layer Down";
+    moveDownLabel.innerHTML = "\\/";
+    moveDownLabel = moveWrapper.appendChild(moveDownLabel);
+
+    // Move Layer Down Button Input
+    moveDownInput.type = "button";
+    moveDownInput.classList = "editor-input";
+    moveDownInput.addEventListener("click", function(e) {
+      const pos = Array.from(document.querySelector("#layers").children).indexOf(e.target.closest(".layer"))-1;
+
+      if(pos+1 !== opts.capeData.layers.length) {
+        moveLayer(pos, pos+1);
+
+        redraw();
+      }
+    });
+    moveDownLabel.appendChild(moveDownInput);
+
+    // Move Layer Down Button Label
     editLabel.classList = "editor-button";
-    editLabel.title = "Edit Pattern";
+    editLabel.title = "Move Layer Down";
     editLabel.innerHTML = "Edit";
     editLabel = layer.appendChild(editLabel);
 
+    // Move Layer Down Button Input
     editInput.type = "button";
     editInput.classList = "editor-input";
     editInput.addEventListener("click", openPatternEditor);
     editLabel.appendChild(editInput);
 
+    // Edit Layer Button Label
+    editLabel.classList = "editor-button";
+    editLabel.title = "Edit Pattern";
+    editLabel.innerHTML = "Edit";
+    editLabel = layer.appendChild(editLabel);
+
+    // Edit Layer Button Input
+    editInput.type = "button";
+    editInput.classList = "editor-input";
+    editInput.addEventListener("click", openPatternEditor);
+    editLabel.appendChild(editInput);
+
+    // Delete Layer Button Label
     deleteLabel.classList = "editor-button";
     deleteLabel.title = "Delete Pattern";
     deleteLabel.innerHTML = "Del";
     deleteLabel = layer.appendChild(deleteLabel);
 
+    // Delete Layer Button Input
     deleteInput.type = "button";
     deleteInput.classList = "editor-input";
     deleteInput.addEventListener("click", function() {
@@ -515,16 +664,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     deleteLabel.appendChild(deleteInput);
 
+    // Layer Grab Indicator
+    grabPoint.classList = "layerGrab"
+    layer.appendChild(grabPoint);
+
     document.querySelector("#layers").appendChild(fullLayer);
 
     if(!onlyHTML) {
       opts.capeData.layers.push({
         color: colorValue,
-        pattern: patternValue
+        pattern: patternValue,
+        visible: true
       });
 
       console.warn('redraw');
-      redraw();
+      redraw(true);
     }
 
     return layerNum;
@@ -582,53 +736,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector("#patternEditor").style = "";
   }
-
-  document.querySelector("#redraw").addEventListener("click", function() {
-    console.warn('redraw');
-    redraw();
-  });
-
-  document.querySelector("#shade").addEventListener("click", function(e) {
-    opts.doShading = e.target.checked;
-    console.warn('redraw');
-    redraw();
-  });
-
-  document.querySelector("#presets").onchange = function (e) {
-    if(opts.custom) {
-      let answer = confirm("Discard all changes?");
-
-      if(answer) {
-        setPreset(e.target.selectedIndex-1)
-
-        opts.custom = false;
-      } else {
-        e.target.value = e.target.children[0].value;
-      }
-    } else {
-      setPreset(e.target.selectedIndex-1)
-    }
-  }
-
-  document.querySelector("#patternColor").oninput = function (e) {
-    e.target.value = e.target.value.replace(/[^0-9a-fA-F]/g, "").substring(0, 6);
-
-    calcColorPick(e);
-  }
-
-  document.querySelector("#done").addEventListener("click", function (e) {
-    if(document.querySelector("#patternColor").value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) closePatternEditor();
-  });
-
-  document.querySelector("#addLayer").addEventListener("click", function (e) {
-    if(opts.capeData.layers.length === layerLimit) {
-      e.target.classList.remove("canAdd");
-      return;
-    }
-    openPatternEditor(null, createLayer());
-  });
-
-  document.querySelector("#baseLayer .editor-input").addEventListener("click", openPatternEditor)
 
   function calcColorPick(e) {
     const h = document.querySelector("#colorH");
@@ -760,17 +867,4 @@ document.addEventListener('DOMContentLoaded', () => {
       redraw();
     }
   }
-
-  document.querySelector("#colorH").oninput = calcColorPick;
-  document.querySelector("#colorS").oninput = calcColorPick;
-  document.querySelector("#colorV").oninput = calcColorPick;
-
-  document.querySelector("#patternColor").onchange = function (e) {
-    console.log("change");
-    if(e.target.value.match(/[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}/) != null) updateColor(e);
-  }
-
-  document.querySelector("#colorH").onchange = updateColor;
-  document.querySelector("#colorS").onchange = updateColor;
-  document.querySelector("#colorV").onchange = updateColor;
 });

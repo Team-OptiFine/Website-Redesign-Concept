@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" title="capeEditorCSS" href="css/capeEditor.css" />
+
+  <script src="https://unpkg.com/three/build/three.module.js"></script>
+  <script src="js/capeEditor.js"></script>
+</head>
+
+<body class="unloaded">
+  <input type="checkbox" autocomplete="off" id="enable3d" class="editor-input">
+  <input type="checkbox" autocomplete="off" id="flip" class="editor-input">
+  <input type="checkbox" autocomplete="off" id="shade" class="editor-input" checked>
+
+  <div id="drawer">
+    <select id="presets">
+      <option style="display: none">Custom</option>
+    </select>
+
+    <div id="layers">
+      <div id="baseLayer" class="layer itembar-spaced">
+        <input type="checkbox" checked disabled> <!-- only for some visual consistency -->
+        <div class="patternPreview" style="background-color: #882D2D"></div>
+        <span>Base Layer</span>
+        <label class="editor-button" title="Edit Pattern">
+          Edit
+          <input type="button" class="editor-input openPatterns">
+        </label>
+      </div>
+      <div id="addLayer" class="canAdd"></div>
+    </div>
+
+    <div class="editor-toolbar itembar">
+      <label for="enable3d" class="editor-button" title="Toggle 3D View">
+        3D
+      </label>
+
+      <label for="flip" class="editor-button" title="View Back">Flip</label>
+
+      <label for="shade" class="editor-button" title="Toggle Shading">
+        Shade
+      </label>
+
+      <label class="editor-button" title="test">
+        Redraw <input type="button" id="redraw" class="editor-input">
+      </label>
+    </div>
+  </div>
+
+  <div id="patternEditor" style="display:none">
+    <h3>Layer</h3>
+    <div id="patternSelector">
+    </div>
+
+    <input type="range" min="0" max="360" value="0" id="colorH">
+    <input type="range" min="0" max="100" value="0" id="colorS" style="background: linear-gradient(90deg, white, red);">
+    <input type="range" min="0" max="100" value="50" id="colorV"
+      style="background: linear-gradient(90deg, black, red, white);">
+
+    <div id="hexcolor">
+      <span>#</span>
+      <input type="text" id="patternColor" autocomplete="off" maxlength="7" value="FFFFFF" size="6"
+        pattern="[0-9a-fA-F]{6}|[0-9a-fA-F]{3}">
+    </div>
+
+    <div class="editor-toolbar itembar">
+      <input type="button" id="done" class="editor-input">
+      <input type="button" id="cancel" class="editor-input">
+      <label for="done" class="editor-button" title="Done">OK</label>
+      <label for="cancel" class="editor-button" title="Cancel">Cancel</label>
+    </div>
+  </div>
+
+  <div id="wrapper3D">
+    <div id="viewport">
+      <div id="capeOrigin">
+        <div id="capeTop" class="capeTex cape"></div>
+        <div id="capeRight" class="capeTex cape"></div>
+        <div id="capeFront" class="capeTex cape"></div>
+        <div id="capeLeft" class="capeTex cape"></div>
+        <div id="capeBack" class="capeTex cape"></div>
+        <div id="capeBottom" class="capeTex cape"></div>
+      </div>
+
+      <div id="elytraOrigin">
+        <div id="elytraTop" class="capeTex elytra"></div>
+        <div id="elytraRight" class="capeTex elytra"></div>
+        <div id="elytraFront" class="capeTex elytra"></div>
+        <div id="elytraLeft" class="capeTex elytra"></div>
+        <div id="elytraBack" class="capeTex elytra"></div>
+        <div id="elytraBottom" class="capeTex elytra"></div>
+      </div>
+    </div>
+
+    <span id="renderTime"></span>
+  </div>
+</body>
+
+</html>

@@ -1,7 +1,6 @@
-#capeEditor {
-  width: 600px;
-  padding: .5em;
-  margin: 1em;
+body {
+  background-image: none;
+  background-color: #FFF;
   display: flex;
   align-items: stretch;
   justify-content: space-between;
@@ -9,16 +8,18 @@
   transition: .5s;
 }
 
-#capeEditor.unloaded {
+body.unloaded {
   opacity: 0;
 }
 
 #capeEditor, #patternEditor {
-  height: 400px;
+  height: 100%;
 }
 
 #drawer, #patternEditor {
-  width: 250px;
+  max-width: 350px;
+  min-width: 250px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,7 +35,6 @@
 }
 
 #patternEditor h3 {
-  flex-grow: 1;
   margin: 0.25em;
 }
 
@@ -122,13 +122,19 @@
 
 .layer {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
 }
 
+.layerGrab {
+  width: 16px;
+  background-image: radial-gradient(#313E7C 30%, transparent 20%);
+  background-position: -1px -1px;
+  background-size: 6px 6px;
+}
+
 .layer, #addLayer {
-  height: 32px;
-  padding: 0.5em 0;
+  min-height: 32px;
   margin: 0 0.5em 0.5em 0;
   border: 1px solid #313E7C;
 
@@ -152,7 +158,7 @@
 
 #addLayer.cannotAdd:after {
   content: "Maximum amount of layers reached.";
-  width: 60%;
+  margin: 0 32px;
 }
 
 #addLayer.canAdd {
@@ -161,33 +167,23 @@
   display: grid;
   justify-items: center;
   align-items: center;
+  background-color: #313E7C;
 }
 
 #addLayer.canAdd:hover {
-  background-color: #313E7C;
-}
-
-#addLayer.canAdd:before, #addLayer.canAdd:after {
-  content: "";
-  position: relative;
-  background-color: #313E7C;
-  transition: 100ms;
-  grid-column: 1;
-  grid-row: 1;
-}
-
-#addLayer.canAdd:hover:before, #addLayer.canAdd:hover:after {
   background-color: #FFF;
 }
 
 #addLayer.canAdd:before {
-  width: 1px;
-  height: 1em;
+  content: "+";
+  position: relative;
+  color: #FFF;
+  transition: 100ms;
+  font-size: 20px;
 }
 
-#addLayer.canAdd:after {
-  width: 1em;
-  height: 1px;
+#addLayer.canAdd:hover:before {
+  color: #313E7C;
 }
 
 .layerOver {
@@ -202,12 +198,27 @@
   cursor: grab;
 }
 
-.layer > * {
-  margin: 0.5em;
+.itembar > *, .itembar-spaced > * {
+  margin: 10px 0;
+  margin-right: 10px;
+}
+
+.itembar-spaced > *:first-child {
+  margin-left: 10px;
+}
+
+.itembar-spaced > *:last-child {
+  margin-right: 10px;
+}
+
+.itembar:not(.itembar-spaced) > *:last-child {
+  margin-right: 0;
 }
 
 .layer span {
   flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 
 .patternPreview {
@@ -278,15 +289,38 @@
   color: #FFF;
 }
 
+.editor-button.half {
+  height: 10px;
+  box-sizing: content-box;
+}
+
+.vertical-button-wrapper {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.layer:nth-child(2) .vertical-button-wrapper .editor-button:first-child {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.layer:nth-last-child(2) .vertical-button-wrapper .editor-button:last-child {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .editor-button {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
-  margin: 0.5em 0;
   cursor: pointer;
-  color: #313E7C;
+  color: #FFF;
+  background-color: #313E7C;
   border: 1px solid #313E7C;
   transition: 100ms;
   font-size: 10px;
@@ -298,21 +332,24 @@
   user-select: none;
 }
 
-.editor-toolbar .editor-button {
-  flex-grow: 1;
+.editor-button:hover {
+  color: #313E7C;
+  background-color: #FFF
 }
 
-.editor-toolbar .editor-button:not(:last-child), .layer .editor-button {
-  margin-right: 0.5em;
+.editor-toolbar .editor-button {
+  flex-grow: 1;
 }
 
 /* 3D Renderer */
 
 #wrapper3D {
+  min-width: 300px;
   flex-grow: 1;
   display: flex;
   align-items: center;
   flex-direction: column;
+  overflow: hidden;
 }
 
 #renderTime {

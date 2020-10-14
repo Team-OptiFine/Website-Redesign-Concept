@@ -72,6 +72,43 @@ h2 {
   text-align: center;
 }
 
+ol, ul {
+  width: 500px;
+  padding: 0;
+}
+
+ol {
+  list-style: none;
+  counter-reset: item;
+}
+
+ul {
+  counter-reset: item;
+}
+
+ol > li {
+  counter-increment: item;
+}
+
+ol > li:before {
+  content: counter(item) ".";
+  font-weight: 1000;
+  font-size: 32px;
+  margin: 0.25em;
+  margin-right: 0.5em;
+}
+
+ol li, ul li {
+  display: flex;
+  align-items: center;
+  margin: 1em;
+  line-height: 1.2em;
+}
+
+li ol li, li ul li {
+  margin: .5em;
+}
+
 #header, #footer {
   width: 100%;
   display: flex;
@@ -167,4 +204,15 @@ h2 {
 .largeButton:hover, .largeButton:focus {
   background-color: transparent;
   color: #313E7C;
+}
+
+#capeEditorFrame {
+  padding: .5em;
+  margin: 1em;
+}
+
+#capeEditorFrame iframe {
+  border: 0;
+  width: 700px;
+  height: 450px;
 }

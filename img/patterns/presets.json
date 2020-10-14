@@ -5,15 +5,15 @@
     "layers": [
       {
         "color": "5C1C1C",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "441616",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "E29F00",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -23,15 +23,15 @@
     "layers": [
       {
         "color": "27274E",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "151835",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "E5EAFF",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -41,15 +41,15 @@
     "layers": [
       {
         "color": "DDDDDD",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "C8C8C8",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "FFFFFF",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -59,15 +59,15 @@
     "layers": [
       {
         "color": "5E5E5E",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "444444",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "CECECE",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -77,15 +77,15 @@
     "layers": [
       {
         "color": "010101",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "202020",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "404040",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -95,15 +95,15 @@
     "layers": [
       {
         "color": "5E0000",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "440000",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "E20000",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -113,15 +113,15 @@
     "layers": [
       {
         "color": "005E00",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "004400",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "00E200",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -131,15 +131,15 @@
     "layers": [
       {
         "color": "00005E",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "000044",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "4040FF",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -149,15 +149,15 @@
     "layers": [
       {
         "color": "CACA00",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "BEBE00",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "FFFF00",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -167,15 +167,15 @@
     "layers": [
       {
         "color": "5E005E",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "440044",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "E200E2",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
@@ -185,15 +185,15 @@
     "layers": [
       {
         "color": "005E5E",
-        "pattern": 1
+        "pattern": 1, "visible": true
       },
       {
         "color": "004444",
-        "pattern": 3
+        "pattern": 3, "visible": true
       },
       {
         "color": "00E2E2",
-        "pattern": 2
+        "pattern": 2, "visible": true
       }
     ]
   },
