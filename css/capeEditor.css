@@ -50,7 +50,7 @@ body {
 
   transform-style: preserve-3d;
   transform-origin: 10px 0;
-  transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(-10px);
+  transform: rotateY(30deg) rotateZ(-10deg) rotateX(0deg) translateX(-3px) translateY(-2px) scale(1.2);
 
   animation-name: loaderCape, showLoader;
   animation-duration: 2s, 100ms;
