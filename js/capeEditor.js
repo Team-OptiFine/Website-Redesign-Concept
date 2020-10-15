@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(() => {
     console.log(patterns);
     console.log(presets);
-    document.querySelector("body").classList.remove("unloaded");
+    document.querySelector("#loadingCircle").classList.add("loaded");
   
     document.querySelector("#shade").addEventListener("click", function(e) {
       opts.doShading = e.target.checked;
