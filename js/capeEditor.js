@@ -24,6 +24,19 @@ const opts = {
   }
 }
 
+const vp = {
+  loader: null,
+  cape: null,
+  capeMat: null
+}
+
+import * as THREE from './three.module.js';
+
+import { OrbitControls } from './threeOrbitControls.js';
+import { OBJLoader } from './threeOBJLoader.js';
+
+
+
 const presets = [];
 
 const staticPatterns = [];
@@ -81,6 +94,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setup = [];
   const dir = "./img/patterns/";
+
+  // Set up 3D viewport
+  setup.push(new Promise((resolve, reject) => {
+    let scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
+
+    vp.loader = new THREE.TextureLoader();
+
+    
+    let camera = new THREE.PerspectiveCamera( 30, 1, 1, 1000);
+    camera.position.z = 45;
+    let renderer = new THREE.WebGLRenderer({ antialias: true });
+
+    document.querySelector("#view3D").appendChild( renderer.domElement );
+
+    vp.capeMat = new THREE.MeshLambertMaterial();
+    vp.capeMat.transparent = true;
+    vp.capeMat.side = THREE.DoubleSide;
+    vp.capeMat.depthFunc = THREE.LessEqualDepth;
+
+    //let capeGeo = new THREE.BoxGeometry( 10, 16, 1);
+    let capeGeo = new THREE.BufferGeometry()
+
+    capeGeo.setAttribute("position", new THREE.BufferAttribute(
+      new Float32Array([5,-8,-0.5,5,8,-0.5,5,8,0.5,5,-8,-0.5,5,8,0.5,5,-8,0.5,5,-8,0.5,5,8,0.5,-5,8,0.5,5,-8,0.5,-5,8,0.5,-5,-8,0.5,-5,-8,0.5,-5,8,0.5,-5,8,-0.5,-5,-8,0.5,-5,8,-0.5,-5,-8,-0.5,-5,-8,-0.5,-5,8,-0.5,5,8,-0.5,-5,-8,-0.5,5,8,-0.5,5,-8,-0.5,5,-8,0.5,-5,-8,0.5,-5,-8,-0.5,5,-8,0.5,-5,-8,-0.5,5,-8,-0.5,-5,8,0.5,5,8,0.5,5,8,-0.5,-5,8,0.5,5,8,-0.5,-5,8,-0.5]),
+      3,
+      false
+    ));
+
+    capeGeo.setAttribute("normal", new THREE.BufferAttribute(
+      new Float32Array([1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,-1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,-1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0]),
+      3,
+      false
+    ));
+
+    capeGeo.setAttribute("uv", new THREE.BufferAttribute(
+      new Float32Array([0.021739,0.227273,0.021739,0.954545,0,0.954545,0.021739,0.227273,0,0.954545,0,0.227273,0.478261,0.227273,0.478261,0.954545,0.26087,0.954545,0.478261,0.227273,0.26087,0.954545,0.26087,0.227273,0.26087,0.227273,0.26087,0.954545,0.23913,0.954545,0.26087,0.227273,0.23913,0.954545,0.23913,0.227273,0.23913,0.227273,0.23913,0.954545,0.021739,0.954545,0.23913,0.227273,0.021739,0.954545,0.021739,0.227273,0.456522,1,0.23913,1,0.23913,0.954545,0.456522,1,0.23913,0.954545,0.456522,0.954545,0.23913,1,0.021739,1,0.021739,0.954545,0.23913,1,0.021739,0.954545,0.23913,0.954545]),
+      2,
+      false
+    ));
+
+    capeGeo.rotateY(Math.PI);
+
+    console.log(JSON.stringify(capeGeo, null, 4));
+
+    
+
+    vp.cape = new THREE.Mesh(
+      capeGeo,
+      vp.capeMat
+    );
+    scene.add(vp.cape);
+
+
+    scene.add(new THREE.AmbientLight(0xffffff));
+    /* let light = new THREE.DirectionalLight( 0xffffff, 1 );
+    light.position.set(50, 100, 200)
+
+    scene.add(light); */
+
+    
+
+    window.addEventListener('resize', recalcDisplay, false);
+
+    let controls = new OrbitControls(camera, renderer.domElement);
+    //controls.maxPolarAngle = Math.PI * 0.5;
+    controls.minDistance = 25;
+    controls.maxDistance = 75;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.15;
+    controls.enablePan = false;
+    controls.mouseButtons = {
+      LEFT: THREE.MOUSE.ROTATE,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.ROTATE
+    }
+
+    function recalcDisplay() {
+      let viewport = document.querySelector("#view3D");
+
+      camera.aspect = viewport.clientWidth / viewport.clientHeight;
+      camera.updateProjectionMatrix();
+
+      //renderer.setPixelRatio(0.5);
+      renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      controls.update();
+
+      renderer.render(scene, camera);
+    }
+    animate();
+    recalcDisplay();
+
+    resolve();
+    
+  }))
 
   // Load Patterns
   setup.push(new Promise((resolve, reject) => {
@@ -263,6 +376,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function redraw(scrollToBottom) {
+    console.log(opts);
+    console.log(vp);
     if(!opts.custom) {
       // check if the design is now customized
       let presetData = JSON.parse(JSON.stringify(presets[opts.preset]));
@@ -344,7 +459,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
           document.querySelector("#renderTime").innerHTML = "Render Time: "+timeTaken;
 
-          opts.cssRule.style = "background-image: url(data:image/png;"+base64+")";
+          let dataURI = `data:image/png;${base64}`;
+
+          let texture = vp.loader.load(dataURI);
+
+          texture.minFilter = THREE.NearestFilter;
+          texture.magFilter = THREE.NearestFilter;
+
+          vp.capeMat.map = texture;
+          vp.capeMat.needsUpdate = true;
+          vp.cape.material = vp.capeMat;
         })
       })
     }

@@ -17,8 +17,8 @@ body.unloaded {
 }
 
 #drawer, #patternEditor {
-  max-width: 350px;
-  min-width: 250px;
+  max-width: 364px;
+  min-width: 316px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -339,6 +339,18 @@ body.unloaded {
 
 .editor-toolbar .editor-button {
   flex-grow: 1;
+}
+
+/* 3D Renderer, THREE.js */
+
+#view3D {
+  margin-left: .75em;
+  overflow: hidden;
+}
+
+#view3D, #view3D canvas {
+  width: 100%;
+  height: 100%;
 }
 
 /* 3D Renderer */

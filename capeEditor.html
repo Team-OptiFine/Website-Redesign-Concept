@@ -8,8 +8,7 @@
   <link rel="stylesheet" title="capeEditorCSS" href="css/capeEditor.css" />
 
   <script src="js/jimp.js"></script>
-  <script src="https://unpkg.com/three/build/three.module.js"></script>
-  <script src="js/capeEditor.js"></script>
+  <script type="module" src="js/capeEditor.js"></script>
 </head>
 
 <body class="unloaded">
@@ -76,7 +75,9 @@
     </div>
   </div>
 
-  <div id="wrapper3D">
+  <div id="view3D"></div>
+
+  <div id="wrapper3D" style="display: none;">
     <div id="viewport">
       <div id="capeOrigin">
         <div id="capeTop" class="capeTex cape"></div>
