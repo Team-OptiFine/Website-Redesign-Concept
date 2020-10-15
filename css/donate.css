@@ -4,7 +4,7 @@
   text-align: center;
 }
 
-#playerName:placeholder-shown ~ #capeEditor {
+#playerName:placeholder-shown ~ #capeEditorFrame {
   filter: grayscale();
   pointer-events: none;
 }
