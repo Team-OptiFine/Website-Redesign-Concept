@@ -35,18 +35,8 @@
     </div>
 
     <div class="editor-toolbar itembar">
-      <label for="enable3d" class="editor-button" title="Toggle 3D View">
-        3D
-      </label>
-
-      <label for="flip" class="editor-button" title="View Back">Flip</label>
-
       <label for="shade" class="editor-button" title="Toggle Shading">
-        Shade
-      </label>
-
-      <label class="editor-button" title="test">
-        Redraw <input type="button" id="redraw" class="editor-input">
+        toggle shading
       </label>
     </div>
   </div>
@@ -75,29 +65,7 @@
     </div>
   </div>
 
-  <div id="view3D"></div>
-
-  <div id="wrapper3D" style="display: none;">
-    <div id="viewport">
-      <div id="capeOrigin">
-        <div id="capeTop" class="capeTex cape"></div>
-        <div id="capeRight" class="capeTex cape"></div>
-        <div id="capeFront" class="capeTex cape"></div>
-        <div id="capeLeft" class="capeTex cape"></div>
-        <div id="capeBack" class="capeTex cape"></div>
-        <div id="capeBottom" class="capeTex cape"></div>
-      </div>
-
-      <div id="elytraOrigin">
-        <div id="elytraTop" class="capeTex elytra"></div>
-        <div id="elytraRight" class="capeTex elytra"></div>
-        <div id="elytraFront" class="capeTex elytra"></div>
-        <div id="elytraLeft" class="capeTex elytra"></div>
-        <div id="elytraBack" class="capeTex elytra"></div>
-        <div id="elytraBottom" class="capeTex elytra"></div>
-      </div>
-    </div>
-
+  <div id="viewport">
     <span id="renderTime"></span>
   </div>
 </body>

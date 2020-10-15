@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.position.z = 45;
     let renderer = new THREE.WebGLRenderer({ antialias: true });
 
-    document.querySelector("#view3D").appendChild( renderer.domElement );
+    document.querySelector("#viewport").appendChild( renderer.domElement );
 
     vp.capeMat = new THREE.MeshLambertMaterial();
     vp.capeMat.transparent = true;
@@ -164,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     controls.maxDistance = 75;
     controls.enableDamping = true;
     controls.dampingFactor = 0.15;
+    controls.zoomSpeed = 2;
     controls.enablePan = false;
     controls.mouseButtons = {
       LEFT: THREE.MOUSE.ROTATE,
@@ -172,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function recalcDisplay() {
-      let viewport = document.querySelector("#view3D");
+      let viewport = document.querySelector("#viewport");
 
       camera.aspect = viewport.clientWidth / viewport.clientHeight;
       camera.updateProjectionMatrix();
@@ -308,11 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(patterns);
     console.log(presets);
     document.querySelector("body").classList.remove("unloaded");
-
-    document.querySelector("#redraw").addEventListener("click", function() {
-      console.warn('redraw');
-      redraw();
-    });
   
     document.querySelector("#shade").addEventListener("click", function(e) {
       opts.doShading = e.target.checked;
